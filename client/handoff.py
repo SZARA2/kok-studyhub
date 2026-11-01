@@ -26,7 +26,7 @@ def main():
         path+='/'+args.value
         if args.action=='markdown':path+='/markdown'
         if args.action=='ack':path+='/ack';method='POST';body=b'{}'
-    request=Request(base+path,data=body,method=method,headers={'Authorization':'Bearer '+key,'Content-Type':'application/json'})
+    request=Request(base+path,data=body,method=method,headers={'Authorization':'Bearer '+key,'Content-Type':'application/json','User-Agent':'kokbot-handoff/1.0'})
     with urlopen(request,timeout=30) as response:content=response.read().decode('utf-8')
     if args.out:
         output=Path(args.out);output.parent.mkdir(parents=True,exist_ok=True);output.write_text(content,encoding='utf-8')
