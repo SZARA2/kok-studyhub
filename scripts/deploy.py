@@ -13,6 +13,7 @@ import json
 import os
 import re
 import shutil
+import sqlite3
 import subprocess
 import time
 import urllib.request
@@ -82,11 +83,20 @@ def deploy(root):
         if old_state.get('container')==candidate: raise RuntimeError('Candidate is the current live container')
         run('docker','rm','-f',candidate)
     data=root/'data';data.mkdir(exist_ok=True,mode=0o700)
+    database=data/'kokbot.sqlite3'
+    if database.exists():
+        backups=root/'backups';backups.mkdir(exist_ok=True,mode=0o700)
+        snapshot=backups/(str(int(time.time()))+'.sqlite3')
+        with sqlite3.connect(f'file:{database}?mode=ro',uri=True) as source, sqlite3.connect(snapshot) as target:
+            source.backup(target)
+        snapshot.chmod(0o600)
+        for old in sorted(backups.glob('*.sqlite3'))[:-7]:old.unlink()
     keys=root/'keys.json'
     if not keys.exists() or keys.stat().st_mode & 0o077: raise RuntimeError('keys.json must exist with mode 600')
     run('docker','run','-d','--name',candidate,'--restart','unless-stopped',
         '--network',cfg['network'],'--user',str(os.getuid())+':'+str(os.getgid()),
         '--memory','512m','--cpus','1','--pids-limit','128','--read-only',
+        '--log-opt','max-size=5m','--log-opt','max-file=2',
         '--cap-drop','ALL','--security-opt','no-new-privileges:true','--tmpfs','/tmp:rw,noexec,nosuid,size=32m',
         '-v',str(data)+':/data','-v',str(keys)+':/run/secrets/kokbot-keys.json:ro',
         '-e','KOKBOT_KEYS_FILE=/run/secrets/kokbot-keys.json','-e','KOKBOT_BASE_PATH='+cfg['prefix'],image)
@@ -136,12 +146,6 @@ def deploy(root):
         if health.get('revision')!=revision:raise RuntimeError('Public health revision does not match the deployed commit')
         state={'revision':revision,'container':candidate,'deployed_at':time.time(),'ci_run':matching[0]['html_url'],'health_url':health_url}
         temp=root/'state.next.json';temp.write_text(json.dumps(state,indent=2));temp.replace(state_path)
-        previous_container=old_state.get('container')
-        if previous_container and previous_container!=candidate and re.fullmatch(r'kokbot-[a-f0-9]{12}',previous_container):
-            run('docker','stop','--time','15',previous_container)
-            # Keep one previous stopped container/image for manual rollback.
-            for name in run('docker','ps','-a','--filter','name=kokbot-','--format','{{.Names}}').splitlines():
-                if name not in (previous_container,candidate) and re.fullmatch(r'kokbot-[a-f0-9]{12}',name):run('docker','rm',name)
         print('Deployed '+revision+'; public health verified; CI '+matching[0]['html_url'])
     except Exception:
         if switched and old_bytes is not None:
@@ -158,6 +162,16 @@ def deploy(root):
                 run('docker','exec',cfg['caddy_container'],'caddy','reload','--config',cfg['caddy_container_config'])
         run('docker','rm','-f',candidate)
         raise
+    # Cleanup failure must never roll back a healthy deployment to a stopped container.
+    previous_container=old_state.get('container')
+    if previous_container and previous_container!=candidate and re.fullmatch(r'kokbot-[a-f0-9]{12}',previous_container):
+        try:
+            run('docker','stop','--time','15',previous_container)
+            # Keep one previous stopped container/image for manual rollback.
+            for name in run('docker','ps','-a','--filter','name=kokbot-','--format','{{.Names}}').splitlines():
+                if name not in (previous_container,candidate) and re.fullmatch(r'kokbot-[a-f0-9]{12}',name):run('docker','rm',name)
+        except Exception:
+            print('Deployment is healthy; previous-container cleanup needs operator review')
 
 
 if __name__=='__main__':
