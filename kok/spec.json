@@ -1,0 +1,82 @@
+{
+  "title": "RC 실험실: 축전기는 왜 천천히 찰까",
+  "concept": "RC 회로 충전·방전과 시간상수 τ = RC",
+  "source": { "lecture": "대학물리학2 7주차 27장 직류회로 수업2", "time": "0:16:23 시간상수" },
+  "situation": "카메라 플래시는 버튼을 누르고 몇 초 기다려야 다시 터진다. 그동안 안에서는 전지(기전력 ε)가 저항 R을 거쳐 축전기 C를 채우고 있다.\n스위치를 닫는 순간부터 전하와 전류가 어떻게 변하는지 먼저 예측해 보자.",
+  "variables": [
+    { "name": "기전력", "symbol": "E", "display": "ε", "unit": "V", "min": 1, "max": 20, "step": 0.5, "default": 12 },
+    { "name": "저항", "symbol": "R", "unit": "kΩ", "min": 100, "max": 2000, "step": 100, "default": 800 },
+    { "name": "전기용량", "symbol": "C", "unit": "μF", "min": 1, "max": 20, "step": 0.5, "default": 5 }
+  ],
+  "modes": [
+    { "label": "충전", "set": { "m": 0 } },
+    { "label": "방전", "set": { "m": 1 } }
+  ],
+  "formulas": [
+    { "label": "시간상수", "symbol": "tau", "display": "τ = RC", "expr": "R*C/1000", "unit": "s" },
+    { "label": "최대 전하", "symbol": "Q", "display": "Q = Cε", "expr": "C*E", "unit": "μC" },
+    { "label": "처음 전류", "symbol": "I0", "display": "I₀ = ε/R", "expr": "E/R*1000", "unit": "μA" },
+    { "label": "축전기 전하", "symbol": "q", "display": "충전 q(t) = Cε(1 − e^(−t/RC)) · 방전 q(t) = Cε·e^(−t/RC)", "expr": "m==0 ? Q*(1-Math.exp(-t/tau)) : Q*Math.exp(-t/tau)", "unit": "μC" },
+    { "label": "전류 크기", "symbol": "i", "display": "i(t) = (ε/R)·e^(−t/RC)", "expr": "I0*Math.exp(-t/tau)", "unit": "μA" },
+    { "label": "축전기 전압", "symbol": "Vc", "display": "V_C = q/C", "expr": "q/C", "unit": "V" }
+  ],
+  "plot": {
+    "x": { "symbol": "t", "label": "시간 t", "unit": "s", "min": 0, "max": 30 },
+    "y": [
+      { "label": "전하 q", "expr": "q", "unit": "μC", "color": "#7c3aed" },
+      { "label": "전류 i", "expr": "i", "unit": "μA", "color": "#f97316", "axis": "right" }
+    ],
+    "playSeconds": 10,
+    "playLabel": "스위치 닫기 (재생)"
+  },
+  "markers": [
+    { "label": "τ = RC", "expr": "tau", "color": "#2563eb" },
+    { "label": "절반 0.693τ", "expr": "0.693*tau", "color": "#9ca3af" }
+  ],
+  "bars": [
+    { "label": "q / Q", "expr": "q/Q*100", "max": 100, "unit": "%", "color": "#a78bfa" },
+    { "label": "i / I₀", "expr": "i/I0*100", "max": 100, "unit": "%", "color": "#fb923c" },
+    { "label": "저장 에너지 q²/(2C)", "expr": "q*q/(2*C)", "max": "Q*Q/(2*C)", "unit": "μJ", "color": "#60a5fa" }
+  ],
+  "missions": [
+    { "text": "기본값(ε 12 V, R 800 kΩ, C 5 μF) 그대로 충전을 재생해서 t = τ(4.00 s)를 지나가 보기. 그때 q가 몇 μC인지 읽어 봐.", "check": "m==0 && playing && R==800 && C==5 && t>=tau" },
+    { "text": "R을 1600 kΩ(2배)로 바꾸고 다시 재생. τ 칸과 파란 점선이 어디로 가는지 봐.", "check": "R==1600 && playing && t>=tau" },
+    { "text": "방전으로 바꿔 재생. 전하 곡선이 어떻게 바뀌는지 봐.", "check": "m==1 && playing && t>=tau" }
+  ],
+  "predict": [
+    {
+      "question": "스위치를 닫는 바로 그 순간(t = 0), 회로에 흐르는 전류는?",
+      "options": ["0. 축전기가 비어 있어서 아직 전류가 안 흐른다", "ε/R. 이때가 최대 전류다", "ε/(2R). 저항과 축전기가 전압을 반씩 나눠 가진다"],
+      "answer": "B",
+      "why": "t = 0이면 축전기에 전하가 없어서 q/C = 0이다. 고리 법칙 ε − 0 − IR = 0이므로 I = ε/R, 기전력이 전부 저항에 걸린다. A는 꽉 찬 뒤(t → ∞)의 모습이고, C의 반반은 t = 0.693τ 한 순간일 뿐이다."
+    },
+    {
+      "question": "C와 ε는 그대로 두고 R만 2배로 하면, 시간상수 τ(전하가 63.2%까지 차는 시간)는?",
+      "options": ["절반이 된다", "그대로다", "2배가 된다", "4배가 된다"],
+      "answer": "C",
+      "why": "τ = RC이므로 R이 2배면 τ도 2배. 저항이 크면 전류가 작아서 같은 전하를 채우는 데 오래 걸린다. 4배는 저항 열 I²R의 제곱과 헷갈린 경우다."
+    }
+  ],
+  "cover": [
+    "**최종 전하 Q = Cε에는 R이 없다.** R은 얼마나 빨리 차는지만 바꾸고, 결국 채우는 양은 같다. 그래서 R을 바꾸면 곡선의 높이는 그대로이고 꺾이는 곳(τ)만 옆으로 밀린다.",
+    "충전이 끝나면 전지가 준 일 Cε² 중 절반 ½Cε²만 축전기에 남고 나머지 절반은 저항 열로 나간다. 방전에서는 저장된 에너지가 전부 저항 열이 된다.",
+    "생략한 조건: 도선과 전지의 내부저항은 0, 스위치는 순간적으로 닫힌다고 가정했다."
+  ],
+  "challenge": [
+    {
+      "question": "카메라 플래시 축전기 C = 10.0 μF를 R = 3.00×10⁵ Ω 저항으로 방전시킨다. 시간상수 τ는?",
+      "options": ["0.300 s", "3.00 s", "30.0 s", "3.00 ms"],
+      "answer": "B",
+      "hint": "τ = RC. (3.00×10⁵ Ω)(10.0×10⁻⁶ F)를 계산해 봐.",
+      "why": "τ = (3.00×10⁵)(10.0×10⁻⁶) = 3.00 s"
+    },
+    {
+      "question": "같은 회로에서 전하가 처음의 1/4이 되는 시간 t는 몇 초? (ln 4 ≈ 1.386)",
+      "answer": 4.16,
+      "tol": 0.02,
+      "unit": "s",
+      "hint": "방전 q = Q·e^(−t/τ) = Q/4 이면 e^(−t/τ) = 1/4, 즉 t = τ·ln 4",
+      "why": "t = 3.00 × 1.386 = 4.16 s (= 1.39τ). 에너지가 1/4이 되는 때(0.693τ)와 바꿔 쓰지 않게 조심."
+    }
+  ]
+}
