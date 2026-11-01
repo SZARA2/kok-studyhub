@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>통합 공부판</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<aside id="side">
+  <div class="sh">
+    <button id="sToggle" class="ic" title="사이드바 접기/펴기 (\)">&#9776;</button>
+    <div class="st"><b id="sTitle">통합 공부판</b><span id="sClock"></span></div>
+  </div>
+  <div id="sNext" class="snext"></div>
+  <nav id="sNav">
+    <div class="sg">공부</div>
+    <a data-v="dash"><i>홈</i><span>대시보드</span></a>
+    <a data-v="today"><i>오늘</i><span>오늘 할 일</span><em id="nToday"></em></a>
+    <a data-v="plan"><i>계획</i><span>계획표 (10/15~10/24)</span></a>
+    <div class="sg">과목</div>
+    <div id="sSubj"></div>
+    <div class="sg">모아보기</div>
+    <a data-v="wrong"><i>오답</i><span>전체 오답</span><em id="nWrong"></em></a>
+    <a data-v="extras"><i>자료</i><span>추가자료·링크</span><em id="nExtra"></em></a>
+    <a data-v="memo"><i>메모</i><span>메모장</span></a>
+    <div class="sg">기타</div>
+    <a data-v="settings"><i>설정</i><span>설정·도움말</span></a>
+  </nav>
+  <div class="sf" id="sFoot"></div>
+</aside>
+
+<main id="main">
+  <div id="banner"></div>
+
+  <!-- 과목 화면 상단 바 -->
+  <header id="subBar">
+    <span class="bn" id="bName"></span>
+    <span class="dd" id="bDd"></span>
+    <div class="btabs" id="bTabs">
+      <button data-st="board" class="on">공부판</button>
+      <button data-st="docs">자료 <em id="bNDocs"></em></button>
+      <button data-st="memo">메모</button>
+    </div>
+    <span class="dt" id="bDocsSel"></span>
+    <span class="spc"></span>
+    <button class="btn sm alt" id="bFold" title="위 머리줄 접기 (공부판 넓게)">▲ 접기</button>
+    <button class="btn sm alt" id="bReload" title="원본이 바뀌었으면 다시 불러오기">새로고침</button>
+    <a class="btn sm alt" id="bOrig" target="_blank">새 탭으로</a>
+  </header>
+  <button id="bUnfold" title="머리줄 다시 펼치기">▼<br>펼치기</button>
+  <div id="frames"></div>
+  <div id="loading">여는 중...</div>
+
+  <!-- 일반 화면들 -->
+  <section class="view" id="v-dash"></section>
+  <section class="view" id="v-today">
+    <div class="vh"><h2>오늘 할 일</h2>
+      <div class="dayhead"><button class="btn alt" id="dPrev">이전 날</button><input type="date" id="dPick"><button class="btn alt" id="dNext">다음 날</button><button class="btn" id="dToday">오늘</button></div>
+    </div>
+    <div id="dInfo" class="box"></div>
+    <div id="dNow" class="note"></div>
+    <div id="dList"></div>
+    <div class="note">이 날 공부 진행률 <b id="dPct">0%</b> <span id="dMin"></span> · 체크는 공부도우미의 오늘 할 일과 같은 기록(kw26m:chk_v2)</div>
+  </section>
+  <section class="view" id="v-plan"></section>
+  <section class="view" id="v-wrong">
+    <div class="vh"><h2>전체 오답</h2></div>
+    <div class="note">공부판에서 틀림·모름으로 표시한 카드, 해커톤 문제은행 오답, 문제은행(보조) 오답노트. 누르면 그 카드로 바로 간다.</div>
+    <div class="chips" id="wChips"></div>
+    <div class="chips" id="wType"><button data-v="all" class="on">틀림+모름</button><button data-v="x">틀림만</button><button data-v="u">모름만</button></div>
+    <div id="wList"></div>
+  </section>
+  <section class="view" id="v-extras"></section>
+  <section class="view" id="v-memo"></section>
+  <section class="view" id="v-settings"></section>
+  <section class="view" id="v-viewer">
+    <div class="vbar"><button class="btn sm alt" id="vwBack">뒤로</button><b id="vwTitle"></b><span class="spc"></span><a class="btn sm alt" id="vwOpen" target="_blank">새 탭으로</a></div>
+    <div id="vwBody"></div>
+  </section>
+</main>
+<div id="toast"></div>
+<script src="tex2mml.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
