@@ -1,6 +1,6 @@
 # 콕봇 API · v1
 
-공개 기준 주소: `https://knowledge.openakashic.com/kokbot`  
+공개 기준 주소: `https://knowledge.openakashic.com/kokbot`
 개발 기준 주소: `http://127.0.0.1:8080`
 
 서버는 JSON 보관·전달·형식/참조 검증만 한다. 수집, 요약, 출제, 기기용 문장 작성, 연출 선택, 복습 일정 결정, 튜터 답변은 **각 Grok Bot이 직접 수행**한다. 서버에 모델 API 키나 모델 호출 코드는 없다. 작업 등록 자체가 Grok Bot을 자동으로 깨우지는 않는다. 각 Bot의 도구와 사용자가 승인한 루틴에서 작업을 가져온다.
