@@ -1,0 +1,8 @@
+<!doctype html><html lang="ko" data-kok-template="podcast-v1"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>콕봇 팟캐스트</title>
+<style>body{font-family:system-ui,'Malgun Gothic',sans-serif;max-width:760px;margin:32px auto;padding:0 20px;background:#f3f4f6;color:#172033}main{background:white;padding:24px;border-radius:16px}audio{width:100%;margin:16px 0}p{line-height:1.6}pre{white-space:pre-wrap;font-family:inherit}small{color:#546174}</style></head><body><main>
+<h1 id="title">콕봇 팟캐스트</h1><p id="description"></p><audio controls preload="metadata" data-testid="audio"></audio><p id="playback" data-testid="audio-status" role="status">재생 준비 중</p><small>재생 버튼을 눌러 들으세요. 압축 해제나 파일 이동이 필요하지 않습니다.</small>
+<details><summary>참고 대본 보기</summary><pre id="script"></pre></details></main>
+<script>var PODCAST=/*__PODCAST__*/null;
+var a=document.querySelector('audio');document.getElementById('title').textContent=PODCAST.status.title||'콕봇 팟캐스트';document.getElementById('description').textContent=PODCAST.status.honest_label||PODCAST.status.reason||'';document.getElementById('script').textContent=PODCAST.script||'';a.src=PODCAST.audio_inline;
+function status(){document.getElementById('playback').textContent=(a.error?'재생 오류':a.paused?'재생 준비':'재생 중')+' · '+a.currentTime.toFixed(1)+' / '+(Number.isFinite(a.duration)?a.duration.toFixed(1):'불러오는 중')+'초'}
+['loadedmetadata','play','pause','timeupdate','error'].forEach(function(e){a.addEventListener(e,status)});</script></body></html>

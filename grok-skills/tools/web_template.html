@@ -63,12 +63,16 @@ document.addEventListener('keydown',function(e){var t=e.target;if(t&&(t.tagName=
  if(mode===1&&D)D.key(e)});
 /* 2 팟캐스트 */
 function pod(){var p=DATA.podcast,h='<p>상태: <b data-testid="pod-status">'+esc(p.status.label||p.status.status)+'</b></p><p class="small">'+esc(p.status.checked_at||'확인 시각 미기록')+' — '+esc(p.status.reason||'')+'</p>';
- if(p.audio){h+='<p class="small" data-testid="pod-honest">'+esc(p.status.honest_label||'')+'</p><p class="small">'+esc(p.status.title||'')+' · '+esc(p.status.duration||'')+' · '+esc(p.status.format||'')+' · <a href="'+esc(/^https:\/\//i.test(p.status.notebook_url||'')?p.status.notebook_url:'#')+'" target="_blank" rel="noopener">NotebookLM 노트북</a></p><audio controls preload="metadata" src="'+esc(p.audio)+'" data-testid="audio"></audio><p class="small">실행용 ZIP을 모두 풀어 열면 음원 파일이 함께 연결됩니다.</p>'}else{h+='<p data-testid="no-audio">음원 파일 없음(podcast/audio.* 미존재). 대본은 음원이 아니며 팟캐스트 완료가 아닙니다.</p>'}
- h+='<details data-testid="script-box"><summary>참고 대본 보기</summary><pre class="script">'+esc(p.script)+'</pre></details>';$('#pod').innerHTML=h}
+ if(p.audio){h+='<p class="small" data-testid="pod-honest">'+esc(p.status.honest_label||'')+'</p><p class="small">'+esc(p.status.title||'')+' · '+esc(p.status.duration||'')+' · '+esc(p.status.format||'')+' · <a href="'+esc(/^https:\/\//i.test(p.status.notebook_url||'')?p.status.notebook_url:'#')+'" target="_blank" rel="noopener">NotebookLM 노트북</a></p>';
+ if(p.audio_inline)h+='<audio controls preload="metadata" data-testid="audio"></audio><p class="small" data-testid="audio-status">음원 불러오는 중</p><p class="small">재생 버튼을 눌러 들으세요. 압축 해제가 필요하지 않습니다.</p>';
+ else h+='<p data-testid="separate-audio">큰 음원은 채팅에 함께 첨부한 음원 파일을 눌러 바로 재생하세요. 압축 해제는 필요하지 않습니다.</p>';
+ }else{h+='<p data-testid="no-audio">음원 파일 없음(podcast/audio.* 미존재). 대본은 음원이 아니며 팟캐스트 완료가 아닙니다.</p>'}
+ h+='<details data-testid="script-box"><summary>참고 대본 보기</summary><pre class="script">'+esc(p.script)+'</pre></details>';$('#pod').innerHTML=h;
+ var a=$('#pod audio');if(a){a.src=p.audio_inline;var status=function(){$('#pod [data-testid=audio-status]').textContent=(a.error?'재생 오류':a.paused?'재생 준비':'재생 중')+' · '+a.currentTime.toFixed(1)+' / '+(Number.isFinite(a.duration)?a.duration.toFixed(1):'불러오는 중')+'초'};['loadedmetadata','play','pause','timeupdate','error'].forEach(function(e){a.addEventListener(e,status)})}}
 /* 3 실험실 (v1.2.0): 3D 실험실 파일(lab/lab3d.html)을 iframe으로 연다. 식은 그 안의 SafeExpr(허용목록 파서)로만 계산 — 문자열을 코드로 실행하는 기능 없음 */
 function lab(){var b=$('#lab');if(b.dataset.on)return;b.dataset.on=1;b.textContent='';
- var n=document.createElement('p');n.className='small';n.textContent='3D 화면은 인터넷(CDN)에서 Three.js를 불러옵니다. 인터넷이 없으면 실험실 안에 2D 대체 화면과 오류가 표시됩니다. 실험실 파일: '+DATA.lab3d;b.appendChild(n);
- var f=document.createElement('iframe');f.src=DATA.lab3d;f.title='개념 실험실 3D';f.setAttribute('data-testid','lab-frame');f.style.cssText='width:100%;height:1500px;border:0;border-radius:12px';b.appendChild(f)}
+ var n=document.createElement('p');n.className='small';n.textContent='아래에서 바로 조작하세요. 별도 압축 해제는 필요하지 않습니다. 3D 라이브러리는 인터넷에서 불러옵니다.';b.appendChild(n);
+ var f=document.createElement('iframe');f.srcdoc=DATA.lab3d_html;f.title='개념 실험실 3D';f.setAttribute('data-testid','lab-frame');f.style.cssText='width:100%;height:1500px;border:0;border-radius:12px';b.appendChild(f)}
 /*__MODE4JS__*/
 window.kok={mode:function(){return mode},drill:function(){return D&&D.state()}};
 })();

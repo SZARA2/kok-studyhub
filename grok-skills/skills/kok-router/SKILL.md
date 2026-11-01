@@ -6,7 +6,7 @@ description: 번호 1~4, Quiz me, quiz, 퀴즈, 문제, 연습 및 과목·주�
 
 | 항목 | 내용 |
 |---|---|
-| 버전 | v1.2.2 |
+| 버전 | v1.2.3 |
 | 담당자 | 공동(인수·용철) (추후 누코드 연동=제무, 이번 미구현) |
 | 유래 | kok-button-router (sha256 `6d3df4e2211bbee657f9f8c6dbfa0b114d0b8362f15126685c95758dfb3e6380`) · upstream-latest kok-button-router (sha256 `40f3fda2a59e490e5ff8be62255f82b1fc0ba326041133c2e207ba133243f56c`) |
 | 입력 | 공통 `lecture.md` (작업 폴더 `<작업폴더>/lecture.md`, kok-lecture-collector 출력) + 번호(1~4) 또는 요청 문장 |
@@ -23,6 +23,7 @@ description: 번호 1~4, Quiz me, quiz, 퀴즈, 문제, 연습 및 과목·주�
 - [ ] 웹: 홈 메뉴 1~4와 드릴 보기 1~4를 상태로 구분, 입력칸 타이핑 무시, 봇은 사용자 웹 진행 상황을 가정하지 않음
 
 ## 변경이력
+- v1.2.3 (2026-11-01): 오디오 내장·3D srcdoc·개별 미디어 첨부로 압축 해제 없는 미리보기. 원본 유래 sha256 유지.
 - v1.2.2 (2026-11-01): 지정 생성기·부분 생성·실행 ZIP·출처 표시·2번 전용 로그인 계약 통합. 원본 유래 sha256 유지.
 - v1.2.1 (2026-11-01): 주제만 받은 요청도 HTML 웹으로 완료하는 공통 실행 규칙과 정합. 원본 유래 sha256은 기존 값 유지.
 - v1.2.0 (2026-11-01): upstream-latest kok-button-router (sha256 `40f3fda2a59e490e5ff8be62255f82b1fc0ba326041133c2e207ba133243f56c`) 병합 + t7u 요구 반영.
@@ -56,19 +57,22 @@ description: 번호 1~4, Quiz me, quiz, 퀴즈, 문제, 연습 및 과목·주�
 ## 번호표
 | 번호 | 스킬 | 버전 | 입력 | 출력 | 검증조건 |
 |---|---|---|---|---|---|
-| 1 | kok-problem-drill | v1.2.2 | lecture.md | spec.json(로컬), drill.html(첨부) | spec 검증 통과, 문항마다 출처종류·원문위치 |
-| 2 | kok-podcast | v1.2.2 | lecture.md (+원본 URL 1개) | 중간 안내(interim.md), source.md, 실제 음원 mp3 | 상태 완료/진행중/실패/미연결 중 하나, 음원 파일 있을 때만 완료 |
-| 3 | kok-concept-lab | v1.2.2 | lecture.md | lab.json(로컬), lab3d.html(첨부) | 허용목록 식·기본/극단값 검산, 3D 실제 로드 시만 성공 |
-| 4 | kok-schedule | v1.2.2 | 시간표 이미지·PDF·텍스트 + 사용자 일정 (+선택 lecture.md) | timetable.json, schedule.json, 웹 4번(주간표·확인/수정·계획) | raw_label 문자열·앞0 보존, needs_review, 수업과 겹침 없음, 사용자 명시 없는 확정 마감 없음, 시간표 없으면 요청 |
+| 1 | kok-problem-drill | v1.2.3 | lecture.md | spec.json(로컬), drill.html(첨부) | spec 검증 통과, 문항마다 출처종류·원문위치 |
+| 2 | kok-podcast | v1.2.3 | lecture.md (+원본 URL 1개) | 중간 안내(interim.md), source.md, 실제 음원 mp3 | 상태 완료/진행중/실패/미연결 중 하나, 음원 파일 있을 때만 완료 |
+| 3 | kok-concept-lab | v1.2.3 | lecture.md | lab.json(로컬), lab3d.html(첨부) | 허용목록 식·기본/극단값 검산, 3D 실제 로드 시만 성공 |
+| 4 | kok-schedule | v1.2.3 | 시간표 이미지·PDF·텍스트 + 사용자 일정 (+선택 lecture.md) | timetable.json, schedule.json, 웹 4번(주간표·확인/수정·계획) | raw_label 문자열·앞0 보존, needs_review, 수업과 겹침 없음, 사용자 명시 없는 확정 마감 없음, 시간표 없으면 요청 |
 
-## 실행·전달 계약 (v1.2.2)
+## 실행·전달 계약 (v1.2.3)
 - 기본 결과는 지정된 공통 학습 웹이다. 'HTML이면 완료'가 아니다. 매번 임의 HTML/채점 페이지를 새로 작성하지 않는다. 특히 Q 배열과 grade()만 있는 일괄 채점 웹으로 kok-problem-drill을 대체하지 않는다.
 - 1~3번은 먼저 같은 작업 폴더의 lecture.md를 준비한다. 주제만 있으면 수집 스킬의 topic_generated 모드를 쓰고 원문 미제공 표시를 유지한다. 4번은 시간표만으로 가능하다.
 - 선택한 스킬의 데이터만 만든다. 1번=drill/spec.json, 2번=podcast/status.json과 실제 음원(없으면 진행중/미연결), 3번=lab/lab.json, 4번=schedule/timetable.json·schedule.json. 요청하지 않은 기능 생성·NotebookLM 로그인·시간표 요구는 하지 않는다.
 - 실제 리소스 루트에서 `python3 tools/build_web.py <작업폴더> --out <작업폴더>/web/index.html`을 실행한다. 이 생성기는 고정 드릴·실험실 화면을 쓰고, 없는 기능은 미생성/자료 필요로 표시하며 index.html·build-receipt.json·kok-study-web.zip을 만든다. 다른 기능 파일이 없어도 성공해야 한다.
 - `python3 tools/verify_web.py <작업폴더>/web/index.html --require-mode <선택번호>`가 통과해야 완료다. 2번 음원 준비 중에는 --require-mode 없이 검사하고 '진행중/미연결'을 알리며 완료라 하지 않는다. 임의 HTML·파일 누락 ZIP은 실패로 처리한다.
 - 브라우저에서 선택한 기능을 실제로 조작한다. 1번은 오답 줄긋기+힌트, 정답 후에만 다음, 홈 1~4와 드릴 보기 1~4 구분을 확인한다. 테스트 없이 성공했다고 쓰지 않는다.
-- 채팅에 index.html과 kok-study-web.zip을 함께 첨부한다. ZIP은 오디오·3D·드릴·lecture.md·일정 등 해당 실행에 필요한 파일과 해시 영수증을 포함한다. 사용자에게 ZIP 전체를 풀고 index.html을 열도록 한 줄로 안내한다. 실행 결과 ZIP은 개인 자료일 수 있으므로 공개 템플릿에 넣지 않는다.
+- 채팅에 index.html을 먼저 첨부하고 “HTML을 눌러 미리보기에서 바로 학습하세요”라고 안내한다. 통합 HTML은 3D를 srcdoc으로 내장하고, 16MB 이하 음원은 data URL로 내장하므로 파일 이동·압축 해제가 필요 없다.
+- 2번은 실제 음원 파일과 생성된 podcast.html도 개별 첨부한다. 16MB 초과 음원은 개별 음원 첨부에서 바로 재생하도록 안내하며 깨진 상대 경로 플레이어를 만들지 않는다. 3번은 lab/lab3d.html도 개별 첨부해 그 파일만 눌러 바로 볼 수 있게 한다. 빌더가 출력하는 direct_attachment 경로와 build-receipt.json의 attachments를 따른다.
+- ZIP은 보관용으로 추가 제공하며, 사용자에게 ZIP 다운로드·압축 해제를 기본 사용 절차로 요구하지 않는다. 실제 학습 자료·음원·시간표가 들어 있는 실행 결과를 공개 템플릿에 넣지 않는다.
+- 실제 미리보기 검증: index.html 하나만 별도 빈 폴더로 복사해 2번 음원의 loadedmetadata·재생 시간 진행과 3번 srcdoc의 3D 표시·슬라이더 반응을 확인한다. 개별 podcast.html·lab3d.html도 각각 확인한다. 실제 앱에서 막히면 개별 오디오·3D 첨부를 먼저 제공하고 막힌 부분을 명시한다. 검증 없이 “바로 볼 수 있음”이라고 쓰지 않는다.
 - NotebookLM 로그인 확인은 2번 팟캐스트를 요청했을 때만 한다. 퀴즈·수집·3D·일정은 Google 로그인 없이 진행한다. 새 계정·키·유료 플랜·중앙 백엔드는 만들지 않는다.
 
 ## 순서

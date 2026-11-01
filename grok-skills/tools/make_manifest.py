@@ -20,7 +20,7 @@ def ver(p):
 previous=os.path.join(R,'MANIFEST.json')
 paths=[x['path'] for x in json.load(open(previous,encoding='utf-8'))['files']] if os.path.exists(previous) else list(files())
 # Explicit release additions keep unrelated working files out of public packs.
-paths=sorted(set(paths+['tools/verify_web.py','tests/test_partial_web.py']))
+paths=sorted(set(paths+['tools/verify_web.py','tools/podcast_template.html','tests/test_partial_web.py','tests/e2e_direct_preview.js']))
 # These allowlisted resources are text and .gitattributes requires LF on every host.
 for p in paths:
     fp=os.path.join(R,p)
@@ -31,7 +31,7 @@ F=[{"path":p,"sha256":sha(p),"bytes":os.path.getsize(os.path.join(R,p))} for p i
 S={p.split('/')[1]:ver(p) for p in (x['path'] for x in F) if re.fullmatch(r'skills/kok-[\w-]+/SKILL\.md',p)}
 versions=set(S.values())
 if len(versions)!=1 or None in versions:raise ValueError('all seven skill versions must match')
-M={"pack":"kok-skills","pack_version":next(iter(versions)),"pack_revision":"2026-11-01-delivery.3","created":datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')+' KST(Asia/Seoul)',
+M={"pack":"kok-skills","pack_version":next(iter(versions)),"pack_revision":"2026-11-01-direct-preview.1","created":datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')+' KST(Asia/Seoul)',
    "source":"Reviewed fixed resource bundle; public template memory supplies the actual URL and SHA256 for automatic first-run preparation.",
    "skills":S,"requires":{"python3":">=3.9","node":">=18","playwright(npm, tests/만)":"1.59.1","chromium":"playwright 기본 경로 또는 KOK_CHROME","ffmpeg/ffprobe":"팟캐스트 음원 확인용(선택)"},
    "files":F,"file_count":len(F)}

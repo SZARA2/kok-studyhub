@@ -31,7 +31,7 @@ NotebookLM은 사용하는 계정에서 로그인이 필요합니다. 다른 사
 
 ## v1.2.2 실행과 전달
 
-선택한 스킬의 데이터만 만든 뒤 `python3 tools/build_web.py <작업폴더> --out <작업폴더>/web/index.html`을 실행합니다. 없는 기능은 미생성으로 표시합니다. 공통 화면을 임의의 간단한 채점 HTML로 대체하지 않습니다. `python3 tools/verify_web.py <작업폴더>/web/index.html --require-mode 1`처럼 선택 기능과 실행 ZIP을 확인하고 HTML·ZIP을 함께 첨부합니다. 사용자는 ZIP 전체를 풀고 index.html을 엽니다. topic_generated 자료에는 강의 원문 미제공 표시를 유지합니다. NotebookLM 로그인은 2번 팟캐스트를 선택했을 때만 확인합니다.
+선택한 스킬의 데이터만 만든 뒤 `python3 tools/build_web.py <작업폴더> --out <작업폴더>/web/index.html`을 실행합니다. 없는 기능은 미생성으로 표시합니다. 공통 화면을 임의의 간단한 채점 HTML로 대체하지 않습니다. `python3 tools/verify_web.py <작업폴더>/web/index.html --require-mode 1`처럼 선택 기능과 실행 ZIP을 확인하고 HTML·ZIP을 함께 첨부합니다. 사용자는 HTML을 눌러 미리보기에서 바로 학습합니다. 3D는 srcdoc, 16MB 이하 음원은 data URL로 내장합니다. 개별 3D HTML·음원·팟캐스트 HTML도 첨부하며 ZIP은 보관용입니다. topic_generated 자료에는 강의 원문 미제공 표시를 유지합니다. NotebookLM 로그인은 2번 팟캐스트를 선택했을 때만 확인합니다.
 
 ## 유래
 

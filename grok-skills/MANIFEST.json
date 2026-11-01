@@ -1,17 +1,17 @@
 {
  "pack": "kok-skills",
- "pack_version": "v1.2.2",
- "pack_revision": "2026-11-01-delivery.3",
- "created": "2026-11-01 17:54:25 KST(Asia/Seoul)",
+ "pack_version": "v1.2.3",
+ "pack_revision": "2026-11-01-direct-preview.1",
+ "created": "2026-11-01 18:09:11 KST(Asia/Seoul)",
  "source": "Reviewed fixed resource bundle; public template memory supplies the actual URL and SHA256 for automatic first-run preparation.",
  "skills": {
-  "kok-concept-lab": "v1.2.2",
-  "kok-lecture-collector": "v1.2.2",
-  "kok-onboarding": "v1.2.2",
-  "kok-podcast": "v1.2.2",
-  "kok-problem-drill": "v1.2.2",
-  "kok-router": "v1.2.2",
-  "kok-schedule": "v1.2.2"
+  "kok-concept-lab": "v1.2.3",
+  "kok-lecture-collector": "v1.2.3",
+  "kok-onboarding": "v1.2.3",
+  "kok-podcast": "v1.2.3",
+  "kok-problem-drill": "v1.2.3",
+  "kok-router": "v1.2.3",
+  "kok-schedule": "v1.2.3"
  },
  "requires": {
   "python3": ">=3.9",
@@ -28,13 +28,13 @@
   },
   {
    "path": "CHANGELOG.md",
-   "sha256": "30f7ea87777cad18ef41ac3406b2dbc6c5fbd5c48a8a306b4afa4f2e6e7ce2ad",
-   "bytes": 2409
+   "sha256": "1c97d9f4257bd2c56c5de789611113ecfa7625ca66fc9fb32cc13f428ca0e173",
+   "bytes": 2559
   },
   {
    "path": "README.md",
-   "sha256": "2162d2804ac7dcb7211815b20e929074804052af2fc4b4cfd22b51a37d561582",
-   "bytes": 4371
+   "sha256": "449a384a5435f6dd43f2b5fe4bf75e23072048ba8a5efa7f50346103de2ff13e",
+   "bytes": 4533
   },
   {
    "path": "skills/UPDATE_PROCESS.md",
@@ -43,13 +43,13 @@
   },
   {
    "path": "skills/VERSIONS.md",
-   "sha256": "b6e36805489ff3f3a16a26a9867dbb19d064396e707e927a36809042fc461cf3",
-   "bytes": 2728
+   "sha256": "cc5f6a2b102bfcdd93866b4c709445f308fe27defd0045b92bfdd716befb2de0",
+   "bytes": 2842
   },
   {
    "path": "skills/kok-concept-lab/SKILL.md",
-   "sha256": "96f693f9e3d9ba2102c0ff17a5056e83bc10aa2466210b10b6e4697785e8c862",
-   "bytes": 12927
+   "sha256": "190989d695d38b08e0ad766406129f268d2c7e9a0d4d5776b66047393fe92fbc",
+   "bytes": 14081
   },
   {
    "path": "skills/kok-concept-lab/resources/examples/generic_info_bars.json",
@@ -83,8 +83,8 @@
   },
   {
    "path": "skills/kok-lecture-collector/SKILL.md",
-   "sha256": "c26bded79d335aff8d9462c197edc9a267639ddfea4e9dbc4be5df3ecd1e63fe",
-   "bytes": 11549
+   "sha256": "bd75a345a5b382dc9f275758ee209ce295e6ccea62f3a3069a78a50065a0431a",
+   "bytes": 12703
   },
   {
    "path": "skills/kok-lecture-collector/resources/lecture_template.md",
@@ -93,8 +93,8 @@
   },
   {
    "path": "skills/kok-onboarding/SKILL.md",
-   "sha256": "401aa01c7fbf1e82c52b272ecd11c43e8318a30af42104cebbdd40e9b12a4855",
-   "bytes": 14274
+   "sha256": "3e25418ca0a31c0fa25e200fcdc9df133e8b6cf0ee96e31e6bf63d6da9a637a0",
+   "bytes": 15428
   },
   {
    "path": "skills/kok-onboarding/resources/intro.md",
@@ -103,8 +103,8 @@
   },
   {
    "path": "skills/kok-podcast/SKILL.md",
-   "sha256": "df8468ddb0bae84832476712bfd500c5e0f15811866d158e34afbf212d3b6e1a",
-   "bytes": 9480
+   "sha256": "9b770eeb300d0b19418b94452c57cda8c7100851201b2d9fd561237f61577d8b",
+   "bytes": 10720
   },
   {
    "path": "skills/kok-podcast/resources/status.example.json",
@@ -113,8 +113,8 @@
   },
   {
    "path": "skills/kok-problem-drill/SKILL.md",
-   "sha256": "454b3e0d6245d7e5e0bde38571c1ce7011ef3afdc2243e78c1ea70f9ad2d047e",
-   "bytes": 8995
+   "sha256": "48f7c8d8a55b27a05aaea839d3b0e8ce23cc8f9d64eb17ed65e725868a031062",
+   "bytes": 10149
   },
   {
    "path": "skills/kok-problem-drill/resources/build.py",
@@ -143,8 +143,8 @@
   },
   {
    "path": "skills/kok-router/SKILL.md",
-   "sha256": "2f8c26ff481abba1c9730677e9851d3a6d0c6eded977739622ff08bd2abbea15",
-   "bytes": 11802
+   "sha256": "29bf716795db4dba3a4c9948cd2ee4236d5004a2ea91d71f098c757c1c716492",
+   "bytes": 12956
   },
   {
    "path": "skills/kok-router/resources/route_table.json",
@@ -153,8 +153,8 @@
   },
   {
    "path": "skills/kok-schedule/SKILL.md",
-   "sha256": "8e9a876588e72fadc51abab2222b82c59168f8fcf408066170f2ff455a1b73aa",
-   "bytes": 13352
+   "sha256": "224b3f6e4fff1e420e301fdc7d8e75354b5d080f2c87ab0a223e7c5eb8bf9329",
+   "bytes": 14506
   },
   {
    "path": "skills/kok-schedule/resources/schedule.example.json",
@@ -170,6 +170,11 @@
    "path": "tests/browser.js",
    "sha256": "ddf1f9715291233df81a1822669f17ab0aad000ed5b15e6df1470cf0a195621c",
    "bytes": 1519
+  },
+  {
+   "path": "tests/e2e_direct_preview.js",
+   "sha256": "a0f04fc56ba63fb3bf83f7cc8315d53646a064599715d0a43f16439dc700a2ef",
+   "bytes": 3155
   },
   {
    "path": "tests/e2e_drill.js",
@@ -193,7 +198,7 @@
   },
   {
    "path": "tests/e2e_web.js",
-   "sha256": "df0712f7ab075cbbc2bae120e67610eeb2eba9d32fdca367260d275b8ad79ba4",
+   "sha256": "affdaf3e18f6d983f80ed4d82309f61c7d676c18cd83ce8b987cd03a1dddb96f",
    "bytes": 7255
   },
   {
@@ -258,8 +263,8 @@
   },
   {
    "path": "tests/test_partial_web.py",
-   "sha256": "4d8daccec4a935c37612420c9ce7ce2f963af96e1e038b2b9927cfa867401e99",
-   "bytes": 6053
+   "sha256": "95df28d5f496feb6bd965d93b6d6615a365d018c9c335ec98ead995562e21fa1",
+   "bytes": 7903
   },
   {
    "path": "tests/test_safe_expr.js",
@@ -268,8 +273,8 @@
   },
   {
    "path": "tools/build_web.py",
-   "sha256": "b51a124a638d928d327adff0f9250096b049c5dcb537e63981d247999c3390df",
-   "bytes": 8440
+   "sha256": "c97a7e301c84bb4f3f39e92c494ea87480dae2aea11e06779d257fc4b73b17c7",
+   "bytes": 10635
   },
   {
    "path": "tools/lecture_metadata.py",
@@ -278,8 +283,8 @@
   },
   {
    "path": "tools/make_manifest.py",
-   "sha256": "00b5cd4f6f1b62e755f554811b7846dc0b48559b3b6257f741a5ecc71a0b40a9",
-   "bytes": 2974
+   "sha256": "1562df80531a66c384810e44f6c0958003d5e5240079c64d78e3cfefb337a5a6",
+   "bytes": 3040
   },
   {
    "path": "tools/mkzip.py",
@@ -297,20 +302,25 @@
    "bytes": 14050
   },
   {
+   "path": "tools/podcast_template.html",
+   "sha256": "3482d7f3d9caac8fd875d421fced2378a57bb71c76a987ec3b1ca90377eeb420",
+   "bytes": 1681
+  },
+  {
    "path": "tools/verify_pack.py",
    "sha256": "db2e3000eef11df4f15dcd62ea281d99f50a072e5f51271830417d2fb7f27270",
    "bytes": 3115
   },
   {
    "path": "tools/verify_web.py",
-   "sha256": "e34e5ebecc278eb6efb5fbfe1d5ae4e3595ef9827471868ceab827b257070bf8",
-   "bytes": 2778
+   "sha256": "8bea72bbe488f466ceab36d54a9ec1f88aea47a29677aace6ef812ff8130be36",
+   "bytes": 4568
   },
   {
    "path": "tools/web_template.html",
-   "sha256": "011e87a0065c6d49939c7f29bd1cea8b33b273ba15f846aaa35b9048932b99d7",
-   "bytes": 9856
+   "sha256": "1b2c47a027d01741e2aaa458fcd77699456a278d675cb387249f4b6d8d29c447",
+   "bytes": 10497
   }
  ],
- "file_count": 58
+ "file_count": 60
 }

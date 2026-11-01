@@ -8,7 +8,7 @@ description: >-
 
 | 항목 | 내용 |
 |---|---|
-| 버전 | v1.2.2 |
+| 버전 | v1.2.3 |
 | 담당자 | 용철 (추후 누코드 연동=제무, 이번 미구현) |
 | 유래 | notebooklm-studio-pack (sha256 `7c2050db94a64682553f126e3d7fa7124c2e71992bc868be327ce0eb976db176`) · upstream-latest notebooklm-studio-pack (sha256 `9c8569368d1fa42c0d8a3fabeb8f97aa6c75fc8f0429fb404cc6b48dc2fdb526`) |
 | 입력 | 공통 `lecture.md` |
@@ -26,6 +26,7 @@ description: >-
 - [ ] 브라우저 audio.mp3 loadedmetadata·duration·재생 진행 확인
 
 ## 변경이력
+- v1.2.3 (2026-11-01): 오디오 내장·3D srcdoc·개별 미디어 첨부로 압축 해제 없는 미리보기. 원본 유래 sha256 유지.
 - v1.2.2 (2026-11-01): 지정 생성기·부분 생성·실행 ZIP·출처 표시·2번 전용 로그인 계약 통합. 원본 유래 sha256 유지.
 - v1.2.1 (2026-11-01): 주제만 받은 요청도 HTML 웹으로 완료하는 공통 실행 규칙과 정합. 원본 유래 sha256은 기존 값 유지.
 - v1.2.0 (2026-11-01): upstream-latest notebooklm-studio-pack (sha256 `9c8569368d1fa42c0d8a3fabeb8f97aa6c75fc8f0429fb404cc6b48dc2fdb526`) 병합.
@@ -52,11 +53,11 @@ description: >-
 ## 기본값 (v1.2.0, 앞으로 새로 만들 때)
 - Audio Overview, 한국어, 짧게(목표 5~8분). 소스는 lecture.md 한 파일 + 원본 URL 1개(웹사이트 소스). 같은 자료로 만든 노트북이 있으면 새로 만들지 않는다.
 - 받은 음원은 `ffmpeg -y -loglevel error -i podcast/audio.m4a -ac 1 -b:a 64k podcast/audio.mp3`로 mp3 mono 64 kbps 변환(자르지 않음). 25MB가 넘으면 `-b:a 48k`. 원본 m4a는 지우지 않는다. `ffprobe`로 codec·channels·duration·bit_rate·size를 확인해 status.json에 적는다.
-- 웹 플레이어는 `podcast/audio.mp3`를 가리킨다(웹 파일 옆 상대 경로).
+- 웹 플레이어는 16MB 이하 실제 음원을 data URL로 내장한다. 실제 MP3와 podcast.html도 개별 첨부하고, 큰 음원은 개별 MP3에서 바로 재생한다.
 - 기다리는 동안 먼저 중간 안내를 채팅으로 보낸다: 듣기용 요약 2~4문장 + 핵심 개념 2개(lecture.md 근거 위치 포함), `podcast/interim.md`에도 저장. 완료 확인은 약 1분 간격, 최대 약 12분. 넘으면 상태(진행중)와 노트북 링크만 전한다.
 - 길이 표기는 실제 ffprobe 값으로만. 이미 만든 다른 길이의 음원을 5~8분이라고 부르지 않는다(예: 데모 음원은 "기존 샘플 25분 53초(심층 분석), 새 기본값 5~8분 이전에 생성").
 
-## 실행·전달 계약 (v1.2.2)
+## 실행·전달 계약 (v1.2.3)
 - source_mode: topic_generated 또는 파일만 받은 경우 NotebookLM에는 lecture.md만 올린다. 원본 URL이 실제로 제공된 때만 웹사이트 소스를 추가하며 URL을 꾸며내거나 추가 입력을 강제하지 않는다.
 - 기본 결과는 지정된 공통 학습 웹이다. 'HTML이면 완료'가 아니다. 매번 임의 HTML/채점 페이지를 새로 작성하지 않는다. 특히 Q 배열과 grade()만 있는 일괄 채점 웹으로 kok-problem-drill을 대체하지 않는다.
 - 1~3번은 먼저 같은 작업 폴더의 lecture.md를 준비한다. 주제만 있으면 수집 스킬의 topic_generated 모드를 쓰고 원문 미제공 표시를 유지한다. 4번은 시간표만으로 가능하다.
@@ -64,7 +65,10 @@ description: >-
 - 실제 리소스 루트에서 `python3 tools/build_web.py <작업폴더> --out <작업폴더>/web/index.html`을 실행한다. 이 생성기는 고정 드릴·실험실 화면을 쓰고, 없는 기능은 미생성/자료 필요로 표시하며 index.html·build-receipt.json·kok-study-web.zip을 만든다. 다른 기능 파일이 없어도 성공해야 한다.
 - `python3 tools/verify_web.py <작업폴더>/web/index.html --require-mode <선택번호>`가 통과해야 완료다. 2번 음원 준비 중에는 --require-mode 없이 검사하고 '진행중/미연결'을 알리며 완료라 하지 않는다. 임의 HTML·파일 누락 ZIP은 실패로 처리한다.
 - 브라우저에서 선택한 기능을 실제로 조작한다. 1번은 오답 줄긋기+힌트, 정답 후에만 다음, 홈 1~4와 드릴 보기 1~4 구분을 확인한다. 테스트 없이 성공했다고 쓰지 않는다.
-- 채팅에 index.html과 kok-study-web.zip을 함께 첨부한다. ZIP은 오디오·3D·드릴·lecture.md·일정 등 해당 실행에 필요한 파일과 해시 영수증을 포함한다. 사용자에게 ZIP 전체를 풀고 index.html을 열도록 한 줄로 안내한다. 실행 결과 ZIP은 개인 자료일 수 있으므로 공개 템플릿에 넣지 않는다.
+- 채팅에 index.html을 먼저 첨부하고 “HTML을 눌러 미리보기에서 바로 학습하세요”라고 안내한다. 통합 HTML은 3D를 srcdoc으로 내장하고, 16MB 이하 음원은 data URL로 내장하므로 파일 이동·압축 해제가 필요 없다.
+- 2번은 실제 음원 파일과 생성된 podcast.html도 개별 첨부한다. 16MB 초과 음원은 개별 음원 첨부에서 바로 재생하도록 안내하며 깨진 상대 경로 플레이어를 만들지 않는다. 3번은 lab/lab3d.html도 개별 첨부해 그 파일만 눌러 바로 볼 수 있게 한다. 빌더가 출력하는 direct_attachment 경로와 build-receipt.json의 attachments를 따른다.
+- ZIP은 보관용으로 추가 제공하며, 사용자에게 ZIP 다운로드·압축 해제를 기본 사용 절차로 요구하지 않는다. 실제 학습 자료·음원·시간표가 들어 있는 실행 결과를 공개 템플릿에 넣지 않는다.
+- 실제 미리보기 검증: index.html 하나만 별도 빈 폴더로 복사해 2번 음원의 loadedmetadata·재생 시간 진행과 3번 srcdoc의 3D 표시·슬라이더 반응을 확인한다. 개별 podcast.html·lab3d.html도 각각 확인한다. 실제 앱에서 막히면 개별 오디오·3D 첨부를 먼저 제공하고 막힌 부분을 명시한다. 검증 없이 “바로 볼 수 있음”이라고 쓰지 않는다.
 - NotebookLM 로그인 확인은 2번 팟캐스트를 요청했을 때만 한다. 퀴즈·수집·3D·일정은 Google 로그인 없이 진행한다. 새 계정·키·유료 플랜·중앙 백엔드는 만들지 않는다.
 
 ## 순서 (원본 브라우저 흐름 유지)
@@ -74,4 +78,4 @@ description: >-
 4. 생성 시작 직후 중간 안내(요약 2~4문장 + 핵심 개념 2개)를 채팅으로 먼저 보내고 `podcast/interim.md`에 저장한다.
 5. 약 1분 간격으로 다시 확인(최대 약 12분). 완성되면 ⋮ 메뉴에서 다운로드 → `podcast/audio.<확장자>` → mp3 mono 64k 변환 → ffprobe 확인 → `완료`.
 6. mp3가 실제로 있을 때만 첨부하고 제목·실제 길이·노트북 링크를 한두 줄로 알린다. 끝나지 않았으면 남은 단계와 현재 상태를 그대로 말한다.
-7. 검증: 브라우저에서 `<audio src=podcast/audio.mp3>`의 loadedmetadata, duration, 음소거 재생 시 currentTime 진행(`tests/e2e_web.js`).
+7. 검증: 브라우저에서 내장 음원의 `<audio>`의 loadedmetadata, duration, 음소거 재생 시 currentTime 진행(`tests/e2e_web.js`).

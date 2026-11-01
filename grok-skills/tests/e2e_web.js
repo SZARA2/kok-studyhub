@@ -31,7 +31,7 @@ if(NAME==='public'){
  await h.ck('일정: 입력칸에 1234 입력해도 화면 전환 없음',async()=>{await p.click('[data-testid=sch-title]');await p.keyboard.type('1234 복습');return (await vis(4))===true&&(await vis(1))===false&&(await p.inputValue('[data-testid=sch-title]'))==='1234 복습'});
 }
 await p.keyboard.press('Escape');await p.keyboard.press('2');
-await h.ck('팟캐스트: <audio src=podcast/audio.mp3> + 정직 라벨',async()=>{const src=await p.getAttribute('[data-testid=audio]','src');const hl=await p.textContent('[data-testid=pod-honest]');return src==='podcast/audio.mp3'&&hl.includes('기존 샘플 25분 53초(심층 분석), 새 기본값 5~8분 이전에 생성')&&!/5~8분\s*(음원|길이)/.test(await p.textContent('#pod'))});
+await h.ck('팟캐스트: 내장 음원 + 정직 라벨',async()=>{const src=await p.getAttribute('[data-testid=audio]','src');const hl=await p.textContent('[data-testid=pod-honest]');return src.startsWith('data:audio/mpeg;base64,')&&hl.includes('기존 샘플 25분 53초(심층 분석), 새 기본값 5~8분 이전에 생성')&&!/5~8분\s*(음원|길이)/.test(await p.textContent('#pod'))});
 const meta=await p.$eval('[data-testid=audio]',a=>new Promise(res=>{let ev=false;const f=()=>res({ev,d:a.duration,err:a.error&&a.error.code,rs:a.readyState});a.addEventListener('loadedmetadata',()=>{ev=true;f()});a.addEventListener('error',f);a.load();setTimeout(f,15000)}));console.log('audio meta',JSON.stringify(meta));
 await h.ck('팟캐스트: loadedmetadata 발생',async()=>meta.ev===true);
 await h.ck(`팟캐스트: duration ≈ 1553 s (실측 ${meta.d})`,async()=>Math.abs(meta.d-1553.3)<2);

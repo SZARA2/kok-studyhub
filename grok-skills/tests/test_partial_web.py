@@ -1,5 +1,6 @@
 """Independent-mode and portable-output regression scenarios. No browser required."""
 import contextlib
+import base64
 import io
 import json
 from pathlib import Path
@@ -7,13 +8,14 @@ import shutil
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import wave
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from build_web import build
-from verify_web import verify
+from verify_web import verify, verify_preview
 
 
 class PartialWebTests(unittest.TestCase):
@@ -97,7 +99,11 @@ class PartialWebTests(unittest.TestCase):
             archive.extractall(destination)
         shutil.copy2(self.out.parent / "kok-study-web.zip", destination / "kok-study-web.zip")
         verify(destination / "index.html", require_mode=2)
-        self.assertGreater((destination / "podcast/audio.wav").stat().st_size, 44)
+        data = verify_preview(destination / "index.html")
+        self.assertGreater(len(base64.b64decode(data['podcast']['audio_inline'].split(',', 1)[1])), 44)
+        self.assertFalse((destination / "podcast/audio.wav").exists())
+        self.assertTrue((self.out.parent / "podcast.html").is_file())
+        self.assertTrue((self.out.parent / "podcast/audio.wav").is_file())
 
     def test_lab_only_uses_standard_builder_and_packages_3d(self):
         self.lecture()
@@ -106,6 +112,33 @@ class PartialWebTests(unittest.TestCase):
         self.assertEqual(data["modes"]["3"]["status"], "완료")
         self.assertEqual(data["modes"]["1"]["status"], "미생성")
         verify(self.out, require_mode=3)
+
+    def test_main_html_alone_keeps_3d_and_audio(self):
+        self.lecture()
+        self.put("lab/lab.json", json.loads((ROOT / "skills/kok-concept-lab/resources/examples/generic_info_bars.json").read_text(encoding="utf-8")))
+        self.put("podcast/status.json", {"status": "완료", "title": "Synthetic test tone"})
+        with wave.open(str(self.job / "podcast/audio.wav"), "wb") as audio:
+            audio.setparams((1, 2, 8000, 0, "NONE", "not compressed"))
+            audio.writeframes(b"\0\0" * 800)
+        self.run_build()
+        lone = Path(self.temp.name) / "main-only.html"
+        shutil.copy2(self.out, lone)
+        data = verify_preview(lone)
+        self.assertIn("<html", data['lab3d_html'])
+        self.assertTrue(data['podcast']['audio_inline'].startswith('data:audio/wav;base64,'))
+
+    def test_large_audio_is_announced_as_a_direct_attachment(self):
+        self.lecture()
+        self.put("podcast/status.json", {"status": "완료"})
+        with wave.open(str(self.job / "podcast/audio.wav"), "wb") as audio:
+            audio.setparams((1, 2, 8000, 0, "NONE", "not compressed"))
+            audio.writeframes(b"\0\0" * 800)
+        with patch('build_web.INLINE_AUDIO_LIMIT', 16):
+            data = self.run_build()
+        self.assertIsNone(data['podcast']['audio_inline'])
+        self.assertEqual(data['podcast']['delivery'], 'separate_audio')
+        self.assertFalse((self.out.parent / 'podcast.html').exists())
+        verify(self.out, require_mode=2)
 
     def test_missing_packaged_asset_is_rejected(self):
         self.drill()
