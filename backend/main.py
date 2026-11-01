@@ -232,7 +232,11 @@ def create_app(db_path=None, keys=None, base_path=None):
 
     @app.get('/', response_class=HTMLResponse)
     def home():
-        return (ROOT / 'web/index.html').read_text(encoding='utf-8')
+        return (ROOT / 'web/home.html').read_text(encoding='utf-8')
+
+    @app.get('/workspace', response_class=HTMLResponse)
+    def workspace():
+        return (ROOT / 'web/workspace.html').read_text(encoding='utf-8')
 
     @app.get('/docs', response_class=HTMLResponse)
     def docs():

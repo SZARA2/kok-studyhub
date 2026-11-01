@@ -5,7 +5,7 @@ import argparse
 
 def export(target):
     root = Path(__file__).resolve().parent.parent / 'web'
-    html = (root / 'index.html').read_text(encoding='utf-8')
+    html = (root / 'workspace.html').read_text(encoding='utf-8')
     css = (root / 'style.css').read_text(encoding='utf-8').replace("@import url('data:text/css,');", '')
     js = (root / 'app.js').read_text(encoding='utf-8')
     js = js.replace("sessionStorage.getItem('kokbot.key') || ''", "''")
