@@ -1,0 +1,134 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>개념 실험실 3D</title>
+<style>
+body{margin:0;font-family:system-ui,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#efe7d6;color:#1f2937}
+.wrap{max-width:980px;margin:0 auto;padding:12px}h1{font-size:19px;margin:4px 0}.sub{font-size:13px;color:#4b5563}
+.net{font-size:12px;background:#fff7ed;border-left:4px solid #ea580c;padding:6px 8px;border-radius:6px;margin:6px 0}
+.err{display:none;font-size:13px;background:#fee2e2;color:#991b1b;border-left:4px solid #dc2626;padding:8px;border-radius:6px;margin:6px 0}.err.on{display:block}
+.stage{position:relative;height:420px;border-radius:14px;overflow:hidden;background:radial-gradient(#fffdf6,#e9dfc8);box-shadow:inset 0 0 0 2px #1f2937}
+.stage canvas{display:block;width:100%;height:100%}#fb{position:absolute;inset:0;display:none}.mode2d #fb{display:block}
+.badge{position:absolute;right:8px;top:8px;font-size:12px;background:#111827;color:#fff;padding:3px 8px;border-radius:8px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}@media(max-width:700px){.row{grid-template-columns:1fr}}
+.card{background:#fffdf7;border:2px solid #1f2937;border-radius:12px;padding:10px}
+label{display:block;margin:6px 0;font-size:14px}input[type=range]{width:100%}
+.outs{display:grid;grid-template-columns:1fr 1fr;gap:6px}.outs div{background:#eef2ff;border-radius:8px;padding:6px;font-size:13px}.outs b{font-size:16px}
+.flow{display:flex;gap:6px;margin:8px 0}.flow span{flex:1;text-align:center;padding:4px;border-radius:8px;background:#e5e7eb;font-size:13px}.flow span.on{background:#1f2937;color:#fff}
+.quiz{position:relative}.quiz button{margin:3px;padding:6px 10px;border:2px solid #1f2937;border-radius:8px;background:#fff;cursor:pointer}.quiz button.pick{background:#dbeafe}
+.ans{position:relative;margin-top:8px;padding:10px;border-radius:8px;background:#f0fdf4;min-height:48px;overflow:hidden}
+.cover{position:absolute;inset:0;background:repeating-linear-gradient(45deg,#f5e9cf,#f5e9cf 8px,#efdfbd 8px,#efdfbd 16px);border:2px dashed #92400e;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#78350f;transition:transform .6s ease,opacity .6s;transform-origin:top}
+.cover.lift{transform:perspective(400px) rotateX(-75deg) translateY(-30px);opacity:0;pointer-events:none}
+.stamp{position:absolute;right:8px;top:4px;border:3px solid #dc2626;color:#dc2626;font-weight:800;padding:2px 8px;border-radius:6px;transform:rotate(-12deg) scale(0);transition:transform .3s cubic-bezier(.3,1.8,.5,1)}.stamp.on{transform:rotate(-12deg) scale(1)}
+.tools button{padding:6px 12px;border-radius:8px;border:2px solid #1f2937;background:#fde68a;cursor:pointer}
+#graph{width:100%;height:170px;background:#0f172a;border-radius:8px}.small{font-size:12px;color:#6b7280}
+.clamp{display:none;font-size:12px;background:#fef3c7;color:#92400e;border-left:4px solid #d97706;padding:6px;border-radius:6px;margin-top:6px}.clamp.on{display:block}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;margin:6px 0}.legend span{display:inline-flex;align-items:center;gap:4px}.legend i{display:inline-block;width:14px;height:14px;border:2px solid #111827;border-radius:3px}
+</style></head><body><div class="wrap">
+<h1 id="ttl"></h1><div class="sub" id="cpt"></div><div class="sub" id="fml"></div>
+<div class="net" data-testid="net-note">3D 화면은 Three.js를 인터넷(CDN)에서 불러옵니다. 인터넷이 없으면 아래에 2D 대체 화면과 오류 표시가 나옵니다.</div>
+<div class="err" id="err" data-testid="err" role="alert"></div>
+<div class="stage" id="stage"><canvas id="fb" width="900" height="420" data-testid="fallback"></canvas><span class="badge" id="badge" data-testid="badge">불러오는 중</span></div>
+<div class="legend" id="legend" data-testid="legend"></div>
+<div class="tools" style="margin-top:8px"><button id="intro" data-testid="intro">처음 보기</button> <span class="small">끌어서 돌려 보기 · 값을 바꿀 때만 다시 계산 · 가만히 있으면 그리기 멈춤</span></div>
+<div class="flow"><span id="f1" class="on">1 예측하기</span><span id="f2">2 실험하기</span><span id="f3">3 증명하기</span></div>
+<div class="row"><div class="card quiz" id="pq"></div><div class="card"><div id="sl"></div><div class="clamp" id="clamp" data-testid="clamp-note" role="status"></div></div></div>
+<div class="row"><div class="card"><div class="outs" id="outs"></div></div><div class="card"><canvas id="graph" width="440" height="170"></canvas><div class="small" id="glab"></div></div></div>
+<div class="row"><div class="card quiz" id="cq"></div><div class="card small" id="grd"></div></div>
+</div>
+<script>/*SAFE_EXPR*/</script>
+<script>
+const DATA=/*LAB_JSON*/null;
+(function(){
+var L=DATA,$=function(s){return document.getElementById(s)},V={},OUT={},C={},GY=[],lastKey='',pending=false,recomputes=0;
+var LAB=window.LAB3D={status:'loading',frames:0,loop:false,recomputes:0,errors:[],pixelRatio:null};
+function fail(msg){LAB.errors.push(msg);var e=$('err');e.textContent=(e.textContent?e.textContent+' / ':'')+msg;e.classList.add('on')}
+function txt(id,s){$(id).textContent=s}
+txt('ttl',L.title);txt('cpt',L.concept);txt('fml','식: '+L.formula+' · 원문위치: '+(L.loc||''));txt('grd',(L.grounding||'')+(L.scene_detail?' · 장면: '+L.scene_detail:''));
+var names=L.variables.map(function(v){return v.name}).concat(L.outputs.map(function(o){return o.name}),['t',L.graph?L.graph.x.name:'t']);
+var bad=false;
+L.outputs.forEach(function(o){try{C[o.name]=SafeExpr.compile(o.expr,names)}catch(e){bad=true;fail('식 거부(실행 안 함) '+o.name+': '+e.message)}});
+if(L.graph)L.graph.y.forEach(function(y,i){try{GY[i]=SafeExpr.compile(y.expr,names)}catch(e){bad=true;fail('그래프 식 거부(실행 안 함): '+e.message)}});
+L.variables.forEach(function(v){V[v.name]=v.value});
+// 슬라이더: 입력은 모아 두었다가 프레임마다 한 번 반영
+var SL={};
+// 막대 색 범례(3D·2D 막대와 같은 색 상수 사용)
+var BARS=[['I','I','정보량 I = log2(N/M)','#2563eb'],['fixed1','고정','고정 길이 비트 ceil(I)','#7c3aed'],['Ih','앞','동전 앞면 정보 log2(1/p)','#059669'],['It','뒤','동전 뒷면 정보 log2(1/(1-p))','#d97706'],['H','H','엔트로피 H(p)','#dc2626']];
+BARS.forEach(function(b){var s=document.createElement('span');s.setAttribute('data-testid','legend-'+b[0]);var i=document.createElement('i');i.style.background=b[3];s.appendChild(i);s.appendChild(document.createTextNode(b[1]+': '+b[2]));$('legend').appendChild(s)});
+function bounds(changed){var msgs=[];L.variables.forEach(function(v){if(!v.max_var)return;var lim=V[v.max_var],r=SL[v.name];r.max=String(Math.min(v.max,lim));if(V[v.name]>lim){var old=V[v.name];V[v.name]=lim;r.value=String(lim);msgs.push(v.max_var+'을(를) '+lim+'(으)로 줄여서 '+v.name+'을(를) '+old+' → '+lim+'(으)로 맞췄습니다 ('+v.name+' ≤ '+v.max_var+')')}});
+ var c=$('clamp');if(msgs.length){c.textContent=msgs.join(' / ');c.classList.add('on');LAB.clamps=(LAB.clamps||0)+1}else if(changed&&!L.variables.some(function(v){return v.max_var===changed})){}}
+var sl=$('sl');L.variables.forEach(function(v){var lb=document.createElement('label');var nm=document.createElement('span');nm.textContent=v.label+': ';var b=document.createElement('b');b.id='vv-'+v.name;b.textContent=v.value;var u=document.createElement('span');u.textContent=' '+(v.unit||'');
+ var r=document.createElement('input');r.type='range';r.min=v.min;r.max=v.max;r.step=v.step;r.value=v.value;r.setAttribute('data-testid','slider-'+v.name);
+ SL[v.name]=r;r.addEventListener('input',function(){V[v.name]=+r.value;bounds(v.name);if(!pending){pending=true;requestAnimationFrame(function(){pending=false;recompute()})}});
+ lb.appendChild(nm);lb.appendChild(b);lb.appendChild(u);lb.appendChild(r);sl.appendChild(lb)});
+bounds(null);
+function recompute(force){var key=JSON.stringify(V);if(key===lastKey&&!force)return;lastKey=key;LAB.recomputes=++recomputes;if(bad)return;
+ var env={};for(var k in V)env[k]=V[k];L.outputs.forEach(function(o){var x=C[o.name](env);env[o.name]=x;OUT[o.name]=x});
+ for(var k2 in V)txt('vv-'+k2,V[k2]);
+ var oh=$('outs');oh.textContent='';L.outputs.forEach(function(o){var d=document.createElement('div');d.appendChild(document.createTextNode(o.label));d.appendChild(document.createElement('br'));var b=document.createElement('b');b.setAttribute('data-testid','out-'+o.name);b.textContent=String(Math.round(OUT[o.name]*1000)/1000);d.appendChild(b);d.appendChild(document.createTextNode(' '+(o.unit||'')));oh.appendChild(d)});
+ graph(env);draw2d();if(scene3)scene3.update(OUT,V);step(2)}
+function graph(env){var cv=$('graph'),g=cv.getContext('2d'),W=cv.width,H=cv.height;g.clearRect(0,0,W,H);if(!L.graph)return;var gx=L.graph.x,pts=[],ymax=0,gmax=gx.max_var?Math.min(gx.max,V[gx.max_var]):gx.max;if(gmax<=gx.min)gmax=gx.min+1;
+ for(var i=0;i<=60;i++){var e={};for(var k in env)e[k]=env[k];e[gx.name]=gx.min+(gmax-gx.min)*i/60;var y=GY[0](e);pts.push(y);if(isFinite(y))ymax=Math.max(ymax,y)}ymax=ymax||1;
+ g.strokeStyle='#334155';g.strokeRect(30,8,W-38,H-30);g.shadowColor='#38bdf8';g.shadowBlur=12;g.strokeStyle='#7dd3fc';g.lineWidth=3;g.beginPath();
+ pts.forEach(function(y,i){var X=30+(W-38)*i/60,Y=H-22-(y/ymax)*(H-34);i?g.lineTo(X,Y):g.moveTo(X,Y)});g.stroke();g.shadowBlur=0;
+ var cur=gx.var?V[gx.var]:gx.min,X=30+(W-38)*(cur-gx.min)/(gmax-gx.min),Y=H-22-((OUT.I||0)/ymax)*(H-34);g.fillStyle='#fbbf24';g.shadowColor='#fbbf24';g.shadowBlur=14;g.beginPath();g.arc(X,Y,6,0,7);g.fill();g.shadowBlur=0;
+ g.fillStyle='#e2e8f0';g.font='11px sans-serif';g.fillText(L.graph.y[0].label,34,20);txt('glab','가로: '+gx.label+' ('+gx.min+'~'+gmax+') · 점: 현재 값')}
+function bars(){return BARS.map(function(b){return[b[1],b[0],OUT[b[0]],b[3]]}).filter(function(b){return b[2]!=null&&isFinite(b[2])})}
+function draw2d(){var cv=$('fb'),g=cv.getContext('2d'),W=cv.width,H=cv.height;g.fillStyle='#fbf6ea';g.fillRect(0,0,W,H);g.strokeStyle='#1f2937';g.lineWidth=3;g.strokeRect(10,10,W/2-20,H-20);g.strokeRect(W/2+10,10,W/2-20,H-20);
+ var n=V.N|0,m=V.M|0,cols=Math.ceil(Math.sqrt(n)),s=Math.min((W/2-60)/cols,(H-80)/cols);for(var i=0;i<n;i++){var x=30+(i%cols)*s,y=40+Math.floor(i/cols)*s;g.fillStyle=i<m?'#2563eb':'#e5e7eb';g.fillRect(x,y,s-4,s-4);g.strokeRect(x,y,s-4,s-4)}
+ var B=bars();B.forEach(function(b,i){var h=Math.min(b[2],7)/7*(H-90),x=W/2+40+i*80;g.fillStyle=b[3];g.fillRect(x,H-40-h,50,h);g.strokeRect(x,H-40-h,50,h);g.fillStyle='#111';g.font='13px sans-serif';g.fillText(b[0]+' '+b[2].toFixed(2),x-4,H-22)})}
+// 예측 → 실험 → 증명
+function quiz(el,q,tag,onDone){var h=document.createElement('b');h.textContent=(tag==='p'?'예측: ':'증명: ')+q.question;el.appendChild(h);var row=document.createElement('div');el.appendChild(row);
+ var ans=document.createElement('div');ans.className='ans';var at=document.createElement('div');at.setAttribute('data-testid',tag+'-why');ans.appendChild(at);var st=document.createElement('span');st.className='stamp';st.textContent='정답';st.setAttribute('data-testid',tag+'-stamp');ans.appendChild(st);
+ var cv=document.createElement('div');cv.className='cover';cv.textContent='먼저 하나를 고르면 덮개가 열립니다';cv.setAttribute('data-testid',tag+'-cover');ans.appendChild(cv);el.appendChild(ans);
+ q.choices.forEach(function(c,i){var b=document.createElement('button');b.textContent=c;b.setAttribute('data-testid',tag+'-c'+i);b.onclick=function(){row.querySelectorAll('button').forEach(function(x){x.classList.remove('pick')});b.classList.add('pick');
+  var ok=i===q.answer_index;at.textContent=(ok?'맞았습니다. ':'정답은 「'+q.choices[q.answer_index]+'」. ')+q.why;cv.classList.add('lift');st.classList.toggle('on',ok);if(window.renderMathInElement)try{renderMathInElement(at,{delimiters:[{left:'\\(',right:'\\)',display:false}],throwOnError:false,trust:false})}catch(e){}onDone&&onDone()};row.appendChild(b)})}
+function step(n){['f1','f2','f3'].forEach(function(id,i){$(id).classList.toggle('on',i===n-1)})}
+quiz($('pq'),L.predict,'p',function(){step(2)});quiz($('cq'),L.challenge,'c',function(){step(3)});
+// 3D
+var scene3=null;
+function load3d(){var to=setTimeout(function(){if(LAB.status==='loading')go2d('Three.js 불러오기 시간 초과(인터넷 필요)')},12000);
+ import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js').then(function(T){clearTimeout(to);try{scene3=build(T);LAB.status='3d';txt('badge','3D (Three.js r'+T.REVISION+')');recompute(true);intro()}catch(e){go2d('3D 초기화 실패: '+e.message)}},function(e){clearTimeout(to);go2d('Three.js를 불러오지 못함(인터넷 필요): '+(e&&e.message||e))})}
+function go2d(msg){if(LAB.status==='3d')return;LAB.status='fallback';$('stage').classList.add('mode2d');txt('badge','2D 대체 화면');fail(msg);draw2d()}
+function build(T){var st=$('stage'),W=st.clientWidth,H=st.clientHeight,R=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});
+ var pr=Math.min(window.devicePixelRatio||1,2);R.setPixelRatio(pr);LAB.pixelRatio=pr;R.setSize(W,H);R.shadowMap.enabled=true;R.domElement.setAttribute('data-testid','gl');st.insertBefore(R.domElement,st.firstChild);
+ var S=new T.Scene();S.background=new T.Color(0xf6efdc);var cam=new T.PerspectiveCamera(40,W/H,0.1,100);var rig=new T.Group();S.add(rig);
+ S.add(new T.HemisphereLight(0xffffff,0xb7a98a,1.1));var sun=new T.DirectionalLight(0xffffff,1.4);sun.position.set(4,9,6);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);sun.shadow.camera.left=-8;sun.shadow.camera.right=8;sun.shadow.camera.top=8;sun.shadow.camera.bottom=-8;S.add(sun);
+ var ink=new T.MeshBasicMaterial({color:0x111827,side:T.BackSide});
+ function inked(geo,mat,w){var g=new T.Group(),m=new T.Mesh(geo,mat);m.castShadow=true;m.receiveShadow=true;var o=new T.Mesh(geo,ink);o.scale.setScalar(1+(w||0.06));g.add(o);g.add(m);g.userData.m=m;return g}
+ // 펼친 책장
+ var paper=new T.MeshStandardMaterial({color:0xfffaf0,roughness:.95});[-1,1].forEach(function(s){var pg=inked(new T.BoxGeometry(5.2,0.12,6),paper,0.02);pg.position.set(s*2.7,0,0);pg.rotation.z=-s*0.05;pg.children.forEach(function(c){c.receiveShadow=true});rig.add(pg)});
+ var spine=inked(new T.CylinderGeometry(0.12,0.12,6,12),new T.MeshStandardMaterial({color:0x7c2d12}),0.1);spine.rotation.x=Math.PI/2;rig.add(spine);
+ // 왼쪽: 선택지 타일(최대 64)
+ var tiles=[],tm1=new T.MeshStandardMaterial({color:0xe5e7eb}),tm2=new T.MeshStandardMaterial({color:0x2563eb,emissive:0x1d4ed8,emissiveIntensity:.35});
+ for(var i=0;i<64;i++){var tl=inked(new T.BoxGeometry(0.5,0.2,0.5),tm1,0.08);tl.position.set(-4.6+(i%8)*0.56,0.16,-2.2+Math.floor(i/8)*0.56);rig.add(tl);tiles.push(tl)}
+ // 오른쪽: 땅에 선 막대 + 빛무리
+ var BAR=[],cols=BARS.map(function(b){return parseInt(b[3].slice(1),16)});LAB.barColors=[];
+ for(var j=0;j<5;j++){var mt=new T.MeshStandardMaterial({color:cols[j],emissive:cols[j],emissiveIntensity:.25,roughness:.5});var b=inked(new T.BoxGeometry(0.6,1,0.6),mt,0.07);b.position.set(1.0+j*0.9,0.06,0.6);rig.add(b);
+  var halo=new T.Mesh(new T.BoxGeometry(0.9,1,0.9),new T.MeshBasicMaterial({color:cols[j],transparent:true,opacity:.18,blending:T.AdditiveBlending,depthWrite:false}));halo.position.copy(b.position);rig.add(halo);BAR.push({g:b,h:halo,v:0,cur:0.01});LAB.barColors.push('#'+mt.color.getHexString(T.SRGBColorSpace))}
+ // 빛나는 화살표: 타일 → I 막대
+ var am=new T.MeshBasicMaterial({color:0xfbbf24});var shaft=new T.Mesh(new T.CylinderGeometry(0.07,0.07,3.2,10),am);shaft.rotation.z=Math.PI/2;shaft.position.set(-0.6,2.6,0.6);var head=new T.Mesh(new T.ConeGeometry(0.22,0.5,14),am);head.rotation.z=-Math.PI/2;head.position.set(1.2,2.6,0.6);
+ var glow=new T.Mesh(new T.CylinderGeometry(0.2,0.2,3.2,10),new T.MeshBasicMaterial({color:0xfde68a,transparent:true,opacity:.3,blending:T.AdditiveBlending,depthWrite:false}));glow.rotation.z=Math.PI/2;glow.position.copy(shaft.position);rig.add(shaft);rig.add(head);rig.add(glow);
+ var yaw=-0.35,pitch=0.62,dist=13,rise=1,drag=null,running=false;
+ function cam0(){cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist,Math.sin(pitch)*dist,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(0,0.8,0)}
+ function animating(){if(rise<1)return true;for(var i=0;i<BAR.length;i++)if(Math.abs(BAR[i].cur-BAR[i].v)>0.002)return true;return false}
+ function frame(){if(document.hidden){running=false;LAB.loop=false;return}rise=Math.min(1,rise+0.025);var e=1-Math.pow(1-rise,3),bo=rise<1?Math.sin(rise*Math.PI*3)*(1-rise)*0.25:0;
+  BAR.forEach(function(b){b.cur+=(b.v-b.cur)*0.18;if(Math.abs(b.cur-b.v)<0.002)b.cur=b.v;var h=Math.max(0.02,b.cur*0.55*(e+bo));b.g.scale.y=h;b.g.position.y=0.06+h/2;b.h.scale.y=h+0.15;b.h.position.y=b.g.position.y});
+  tiles.forEach(function(t){var tg=t.userData.t;t.position.y+=(tg-t.position.y)*0.2});
+  glow.material.opacity=0.2+0.15*Math.sin(performance.now()/300);cam0();R.render(S,cam);LAB.frames++;
+  if(animating()||drag||tiles.some(function(t){return Math.abs(t.position.y-t.userData.t)>0.002})){requestAnimationFrame(frame)}else{running=false;LAB.loop=false}}
+ function kick(){if(!running&&!document.hidden){running=true;LAB.loop=true;requestAnimationFrame(frame)}}
+ document.addEventListener('visibilitychange',function(){if(!document.hidden)kick()});
+ R.domElement.addEventListener('pointerdown',function(e){drag={x:e.clientX,y:e.clientY};kick()});addEventListener('pointerup',function(){drag=null});
+ addEventListener('pointermove',function(e){if(!drag)return;yaw-=(e.clientX-drag.x)*0.008;pitch=Math.max(0.15,Math.min(1.3,pitch+(e.clientY-drag.y)*0.006));drag={x:e.clientX,y:e.clientY};kick()});
+ addEventListener('resize',function(){var w=st.clientWidth,h=st.clientHeight;R.setSize(w,h);cam.aspect=w/h;cam.updateProjectionMatrix();kick()});
+ cam0();
+ return{update:function(O,Vv){var vals=BARS.map(function(b){return O[b[0]]});BAR.forEach(function(b,i){b.v=isFinite(vals[i])?Math.min(vals[i],8):0});var n=Vv.N|0,m=Vv.M|0;
+   tiles.forEach(function(t,i){t.visible=i<n;t.userData.m.material=i<m?tm2:tm1;t.userData.t=i<m&&m<n?0.16+0.35:0.16;if(t.userData.t==null)t.userData.t=0.16});kick()},
+  intro:function(){rise=0;BAR.forEach(function(b){b.cur=0.01});kick()},running:function(){return running}}}
+function intro(){if(scene3)scene3.intro();step(1)}
+$('intro').onclick=function(){intro();LAB.introCount=(LAB.introCount||0)+1};
+recompute(true);if(bad){LAB.status='error';txt('badge','식 오류');draw2d();$('stage').classList.add('mode2d')}else load3d();
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script><script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</body></html>

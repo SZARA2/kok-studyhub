@@ -1,0 +1,38 @@
+{
+"title": "XSS 안전 테스트 <img src=x onerror=window.__XSS=1>",
+"problem": "<script>window.__XSS=2</script> 문제 글",
+"source_url": "javascript:window.__XSS=3",
+"questions": [
+{
+"s": "안전",
+"q": "<img src=x onerror=\"window.__XSS=4\"> 식 \\(\\log_2 4\\) 은?",
+"o": [
+"2",
+"<b onmouseover=window.__XSS=5>4</b>",
+"</script><script>window.__XSS=6</script>",
+"\\(\\frac{1}{2}\\)"
+],
+"a": 0,
+"ok": "<svg onload=window.__XSS=7>정답 \\(\\log_2 4=2\\)",
+"no": "<iframe src=javascript:window.__XSS=8></iframe> 힌트",
+"src": "원문 기반 Bot 작성",
+"ans_src": "Bot 풀이",
+"loc": "테스트 샘플(가상)"
+},
+{
+"q": "\\(\\href{javascript:window.__XSS=9}{x}\\) 둘째",
+"o": [
+"a",
+"b",
+"c",
+"d"
+],
+"a": 2,
+"ok": "ok",
+"no": "no",
+"src": "원문 기반 Bot 작성",
+"ans_src": "Bot 풀이",
+"loc": "테스트 샘플(가상)"
+}
+]
+}

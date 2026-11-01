@@ -1,0 +1,68 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>콕 통합</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" onerror="this.remove()">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" onerror="window.NOKATEX=1"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="window.kokMath&&kokMath()" onerror="window.NOKATEX=1"></script>
+<style>
+body{font-family:system-ui,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f3f4f6;margin:0;color:#111}
+header{background:#1f2937;color:#fff;padding:10px 16px;display:flex;justify-content:space-between;align-items:center}header button{background:#374151;color:#fff;border:0;border-radius:8px;padding:6px 10px}
+main{max-width:760px;margin:0 auto;padding:16px}.note{font-size:13px;color:#4b5563;background:#fff;border-left:4px solid #2563eb;padding:8px 10px;border-radius:6px;margin:8px 0}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:12px}.menu button{text-align:left;padding:16px;border-radius:14px;border:1px solid #d1d5db;background:#fff;font-size:16px;cursor:pointer}
+.menu b{font-size:22px;margin-right:6px}.st{display:inline-block;font-size:12px;padding:2px 8px;border-radius:10px;margin-top:6px}.st.완료{background:#dcfce7;color:#166534}.st.미연결{background:#fee2e2;color:#991b1b}.st.진행중{background:#fef3c7}.st.실패{background:#fecaca}
+.small{font-size:12px;color:#6b7280}.panel{background:#fff;border-radius:14px;padding:14px;margin:10px 0}
+/*__DRILLCSS__*/
+.lab label{display:block;margin:8px 0}.lab input[type=range]{width:100%}.out{display:grid;grid-template-columns:1fr 1fr;gap:8px}.out div{background:#eef2ff;border-radius:8px;padding:8px}
+.cells{display:flex;flex-wrap:wrap;gap:2px;margin:6px 0}.cells i{width:10px;height:10px;background:#d1d5db;display:block}.cells i.on{background:#2563eb}
+table{border-collapse:collapse;width:100%;font-size:14px}td,th{border-bottom:1px solid #e5e7eb;padding:6px;text-align:left}
+.badge{color:#fff;border-radius:6px;padding:1px 6px;font-size:12px}.b-red{background:#c0392b}.b-yel{background:#d68910}.b-gry{background:#5d6d7e}.undone{color:#c0392b}.doneTxt{color:#16a34a}
+.card320{width:320px;background:#fff;border-radius:12px;box-shadow:0 2px 10px #0002;padding:12px}.card320 .row{display:flex;gap:6px;align-items:center;margin:6px 0;font-size:14px}
+.wrap{max-width:360px;max-height:200px;height:200px;overflow:hidden;border-radius:14px;position:relative}.track{display:flex;height:100%;transition:transform .6s}.s{flex:0 0 100%;color:#fff;padding:16px;box-sizing:border-box}
+.red{background:linear-gradient(135deg,#c0392b,#8a1538)}.yel{background:linear-gradient(135deg,#d68910,#a04000)}.gry{background:linear-gradient(135deg,#34495e,#1c2833)}.s .big{font-size:22px;font-weight:700;margin:8px 0}
+.dots{text-align:center;max-width:360px}.dots i{display:inline-block;width:7px;height:7px;border-radius:4px;background:#9ca3af;margin:3px}.dots i.on{background:#111}
+pre.script{white-space:pre-wrap;font-family:inherit;font-size:14px;max-height:420px;overflow:auto}
+.hidden{display:none}
+/*__MODE4CSS__*/</style></head><body>
+<header><span id="lecture-heading">콕 통합</span><button id="home" data-testid="home">처음(Esc)</button></header>
+<main>
+<section id="v-home">
+<div class="note">이 화면은 이미 생성된 결과를 보여 주는 화면입니다. 메뉴를 누르는 것은 AI 생성이 아닙니다. 새로 만들려면 봇 채팅에서 요청하세요.</div>
+<div class="menu" id="menu"></div>
+<div class="panel small" id="srcinfo"></div>
+</section>
+<section id="v-1" class="hidden"><h2>1 문제 드릴</h2><div class="small mstatus"></div><div id="drill"></div></section>
+<section id="v-2" class="hidden"><h2>2 팟캐스트</h2><div class="small mstatus"></div><div class="panel" id="pod"></div></section>
+<section id="v-3" class="hidden"><h2>3 개념 실험실</h2><div class="small mstatus"></div><div class="panel lab" id="lab"></div></section>
+<section id="v-4" class="hidden"><h2>4 일정 관리</h2><div class="small mstatus"></div><div class="panel" id="sch"></div></section>
+</main>
+<script>var DATA=/*__DATA__*/null;</script>
+<script>/*__DRILLJS__*/</script>
+<script>
+(function(){
+var mode='home',D=null,$=function(s){return document.querySelector(s)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+window.kokMath=function(el){if(window.renderMathInElement)try{renderMathInElement(el||document.body,{delimiters:[{left:'\\(',right:'\\)',display:false}],throwOnError:false,trust:false})}catch(e){}};
+var M=DATA.modes;
+$('#menu').innerHTML=[1,2,3,4].map(function(n){var m=M[n];return'<button data-menu="'+n+'" data-testid="menu-'+n+'"><b>'+n+'</b>'+esc(m.name)+'<br><span class="st '+m.status+'" data-testid="status-'+n+'">'+esc(m.status_label||m.status)+'</span><div class="small">생성 시각: '+esc(m.time)+' · '+esc(m.skill)+'</div></button>'}).join('');
+if(!DATA.source)$('#srcinfo').innerHTML='<span data-testid="no-lecture">강의 자료(lecture.md) 없음: 4번 일정 관리만 시간표로 동작합니다. 1~3번은 강의 링크·파일을 보내 lecture.md를 만든 뒤 쓸 수 있습니다.</span>';else $('#srcinfo').innerHTML='출처: <a href="'+DATA.source.url+'">'+esc(DATA.source.title)+'</a> · coverage '+esc(DATA.source.coverage)+' · 수집 '+esc(DATA.source.collected)+'<br>누락·제외: '+DATA.source.missing.map(esc).join(' / ')+'<br>키보드: 처음 화면에서만 1~4로 메뉴 열기, 드릴 안에서는 1~4가 보기 선택, Esc로 처음.';
+document.querySelectorAll('[data-menu]').forEach(function(b){b.onclick=function(){open(+b.dataset.menu)}});
+$('#home').onclick=function(){open('home')};
+function open(n){mode=n;['home',1,2,3,4].forEach(function(k){$('#v-'+k).classList.toggle('hidden',k!==n)});
+ if(n!=='home'){var m=M[n];document.querySelector('#v-'+n+' .mstatus').innerHTML='상태: <span class="st '+m.status+'">'+esc(m.status_label||m.status)+'</span> · 생성 시각(로그): '+esc(m.time)+' · 스킬 '+esc(m.skill)+' · 새 생성은 봇 채팅 요청으로만 됩니다.'}
+ if(n!=='home'&&n<4&&!DATA.source){var v=$('#v-'+n+' .mstatus').nextElementSibling;v.innerHTML='<p data-testid="need-lecture-'+n+'">이 기능은 강의 자료(lecture.md)가 필요합니다. 추측해서 만들지 않습니다.</p>';return}
+ if(n===1&&!D)D=KokDrill($('#drill'),DATA.drill);if(n===2)pod();if(n===3)lab();if(n===4)sch();kokMath()}
+document.addEventListener('keydown',function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable))return;
+ if(e.key==='Escape'){open('home');return}
+ if(mode==='home'&&/^[1-4]$/.test(e.key)){open(+e.key);return}
+ if(mode===1&&D)D.key(e)});
+/* 2 팟캐스트 */
+function pod(){var p=DATA.podcast,h='<p>상태: <b data-testid="pod-status">'+esc(p.status.label)+'</b></p><p class="small">'+esc(p.status.checked_at)+' — '+esc(p.status.reason)+'</p>';
+ if(p.audio){h+='<p class="small" data-testid="pod-honest">'+esc(p.status.honest_label||'')+'</p><p class="small">'+esc(p.status.title||'')+' · '+esc(p.status.duration||'')+' · '+esc(p.status.format||'')+' · <a href="'+esc(p.status.notebook_url||'#')+'" target="_blank" rel="noopener">NotebookLM 노트북</a></p><audio controls preload="metadata" src="'+esc(p.audio)+'" data-testid="audio"></audio><p class="small">음원 파일은 이 웹 파일 옆 '+esc(p.audio)+' 에 있어야 재생됩니다.</p>'}else{h+='<p data-testid="no-audio">음원 파일 없음(podcast/audio.* 미존재). 대본은 음원이 아니며 팟캐스트 완료가 아닙니다.</p>'}
+ h+='<details data-testid="script-box"><summary>참고 대본 보기</summary><pre class="script">'+esc(p.script)+'</pre></details>';$('#pod').innerHTML=h}
+/* 3 실험실 (v1.2.0): 3D 실험실 파일(lab/lab3d.html)을 iframe으로 연다. 식은 그 안의 SafeExpr(허용목록 파서)로만 계산 — 문자열을 코드로 실행하는 기능 없음 */
+function lab(){var b=$('#lab');if(b.dataset.on)return;b.dataset.on=1;b.textContent='';
+ var n=document.createElement('p');n.className='small';n.textContent='3D 화면은 인터넷(CDN)에서 Three.js를 불러옵니다. 인터넷이 없으면 실험실 안에 2D 대체 화면과 오류가 표시됩니다. 실험실 파일: '+DATA.lab3d;b.appendChild(n);
+ var f=document.createElement('iframe');f.src=DATA.lab3d;f.title='개념 실험실 3D';f.setAttribute('data-testid','lab-frame');f.style.cssText='width:100%;height:1500px;border:0;border-radius:12px';b.appendChild(f)}
+/*__MODE4JS__*/
+window.kok={mode:function(){return mode},drill:function(){return D&&D.state()}};
+})();
+</script><script>if(typeof DATA!=='undefined'&&DATA.source){document.title=DATA.source.title;document.getElementById('lecture-heading').textContent=DATA.source.title;}</script></body></html>

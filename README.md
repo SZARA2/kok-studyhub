@@ -2,6 +2,8 @@
 
 Grok Bot 빌드데이(해커톤)용 공개 저장소. 누구나 보고, 포크해서 고칠 수 있어요.
 
+- 통합 Bot의 수집·문제 풀이·팟캐스트·시각화·일정 기능은 [팀용 독립 스킬](grok-skills/README.md)로 나눠 관리합니다. [담당자와 업데이트 절차](docs/SKILL_WORKFLOW.md)에 따라 각 스킬을 따로 개선할 수 있어요.
+
 - 바로 열기 (GitHub Pages): https://cyc53233-coder.github.io/kok-studyhub/
 - `kok/` 콕: 수업 중 보드 키 1~4를 누르면 그 구간(앞 60초)을 그록에게 보내고 답을 받는 화면. `lab.html`은 실험실(three.js).
   - 정적 호스팅에서는 실시간 그록 연결 없이 **예시 답**(`example_result.json`)으로 동작해요.

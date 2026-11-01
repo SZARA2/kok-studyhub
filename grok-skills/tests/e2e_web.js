@@ -1,0 +1,42 @@
+// 사용: node e2e_web.js <web.html> <이름(public|private)> [expect.json]
+const {H,chromium,CHROME}=require('./harness');const fs=require('fs'),path=require('path');
+const WEB=path.resolve(process.argv[2]),NAME=process.argv[3]||'public',SS=NAME==='private'?path.resolve(__dirname,'../private/tests/screenshots'):path.resolve(__dirname,'screenshots'),URL='file://'+WEB;
+const h=H('e2e_web '+NAME);
+(async()=>{const b=await chromium.launch({executablePath:CHROME,args:['--use-gl=swiftshader','--enable-webgl','--ignore-gpu-blocklist','--autoplay-policy=no-user-gesture-required']});
+const p=await b.newPage({viewport:{width:900,height:1000}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto(URL);await p.waitForTimeout(1200);const S=n=>p.screenshot({path:`${SS}/web-${NAME}-${n}.png`,fullPage:true});await S('00-home');
+const vis=async n=>p.isVisible('#v-'+n);
+for(const n of [1,2,3,4])await h.ck(`메뉴 ${n} 클릭으로 열림 + Esc 복귀`,async()=>{await p.click(`[data-testid=menu-${n}]`);const v=await vis(n);await p.keyboard.press('Escape');return v===true&&(await vis('home'))===true});
+for(const n of [1,2,3,4])await h.ck(`메뉴 ${n} 키보드로 열림 + Esc 복귀`,async()=>{await p.keyboard.press(String(n));const v=await vis(n);await p.keyboard.press('Escape');return v===true&&(await vis('home'))===true});
+await h.ck('홈 스킬 표기 v1.2.0 (1~4)',async()=>{const t=await p.textContent('#menu');return (t.match(/v1\.2\.0/g)||[]).length===4});
+await p.keyboard.press('1');const q0=await p.evaluate(()=>DATA.drill.questions[0]);const wrong=(q0.a+1)%4;
+await h.ck('드릴: 오답 → 줄긋기 + 아쉬움 팝업/힌트, 다음 비활성',async()=>{await p.keyboard.press(String(wrong+1));const cls=await p.getAttribute(`[data-opt="${wrong}"]`,'class');const hint=await p.textContent('[data-testid=pop-no]');const dis=await p.isDisabled('[data-testid=next]');await S('01-drill-wrong');return cls.includes('wrong')&&hint.includes(q0.no)&&dis===true});
+await h.ck('드릴: 드릴 안 1~4는 메뉴 전환 아님',async()=>(await vis(1))===true&&(await vis(3))===false);
+await h.ck('드릴: 정답 → 하트 팝업 + 다음 이동',async()=>{await p.click(`[data-opt="${q0.a}"]`);const ok=await p.isVisible('[data-testid=pop-ok]');const heart=(await p.$$('[data-testid=heart]')).length>0;await S('02-drill-correct');await p.click('[data-testid=next]');const st=await p.evaluate(()=>kok.drill().i);return ok===true&&heart&&st===1});
+await h.ck('드릴: ← 이전',async()=>{await p.keyboard.press('ArrowLeft');return (await p.evaluate(()=>kok.drill().i))===0});
+await h.ck('드릴: KaTeX 수식 렌더(.katex ≥1)',async()=>{await p.waitForTimeout(500);const n=(await p.$$('#v-1 .katex')).length;console.log('katex nodes',n,'NOKATEX',await p.evaluate(()=>window.NOKATEX||0));return n>0});
+await p.keyboard.press('Escape');await p.keyboard.press('3');
+const fr=await (await p.waitForSelector('[data-testid=lab-frame]')).contentFrame();await fr.waitForFunction(()=>window.LAB3D&&LAB3D.status!=='loading',null,{timeout:20000}).catch(()=>{});
+await h.ck('실험실(iframe): 3D 실제 로드',async()=>(await fr.evaluate(()=>LAB3D.status))==='3d');
+await h.ck('실험실: 기본 출력 5.17/6/60/52',async()=>JSON.stringify(await Promise.all(['I','fixed1','fixedK','lowerK'].map(n=>fr.textContent(`[data-testid=out-${n}]`))))==='["5.17","6","60","52"]');
+await h.ck('실험실: 슬라이더 N=52,M=13 → I=2',async()=>{await fr.$eval('[data-testid=slider-N]',e=>{e.value=52;e.dispatchEvent(new Event('input'))});await fr.$eval('[data-testid=slider-M]',e=>{e.value=13;e.dispatchEvent(new Event('input'))});await p.waitForTimeout(1200);await S('03-lab');return (await fr.textContent('[data-testid=out-I]'))==='2'});
+await h.ck('웹 본문에 문자열 실행 코드 없음(Function(/eval()',async()=>{const s=fs.readFileSync(WEB,'utf8');return !/new Function|Function\.apply|\beval\(/.test(s)});
+await p.keyboard.press('Escape');await p.keyboard.press('4');
+const X=JSON.parse(fs.readFileSync(path.resolve(__dirname,NAME==='public'?'samples/expect_dated_public.json':'samples/expect_dated_private.json'),'utf8'));
+await h.ck(`일정: 날짜 명시 항목 카드 수=${X.upcoming}, 날짜 없는 항목 미포함`,async()=>{const n=(await p.$$('[data-testid=dated-card] .row')).length;const nd=X.upcoming===0?true:(await p.textContent('[data-testid=dated-nodate]')).includes('추측')===false;return n===X.upcoming&&nd});
+if(NAME==='public'){
+ await h.ck('일정: 오늘/내일·D-day·지난 일정 분리(고정 시각 2026-11-03 09:00 KST)',async()=>{await p.evaluate(()=>{window.__KOK_NOW='2026-11-03T09:00:00+09:00'});await p.keyboard.press('Escape');await p.evaluate(()=>{document.getElementById('sch').textContent=''});await p.keyboard.press('4');
+  const t2=await p.textContent('[data-testid=dc-t2]');const dd=await p.textContent('[data-testid=dd-t2]');const past=await p.textContent('[data-testid=past-t1]');const nslide=(await p.$$('[data-testid=dated-slider] .s')).length;await S('04-dated');
+  console.log(JSON.stringify({t2,dd,past,nslide}));return t2.includes('내일 18:00')&&dd==='D-1'&&past.includes('(지남)')&&nslide===1&&(await p.$$('[data-testid=dc-t3]')).length===0});
+ await h.ck('일정: 입력칸에 1234 입력해도 화면 전환 없음',async()=>{await p.click('[data-testid=sch-title]');await p.keyboard.type('1234 복습');return (await vis(4))===true&&(await vis(1))===false&&(await p.inputValue('[data-testid=sch-title]'))==='1234 복습'});
+}
+await p.keyboard.press('Escape');await p.keyboard.press('2');
+await h.ck('팟캐스트: <audio src=podcast/audio.mp3> + 정직 라벨',async()=>{const src=await p.getAttribute('[data-testid=audio]','src');const hl=await p.textContent('[data-testid=pod-honest]');return src==='podcast/audio.mp3'&&hl.includes('기존 샘플 25분 53초(심층 분석), 새 기본값 5~8분 이전에 생성')&&!/5~8분\s*(음원|길이)/.test(await p.textContent('#pod'))});
+const meta=await p.$eval('[data-testid=audio]',a=>new Promise(res=>{let ev=false;const f=()=>res({ev,d:a.duration,err:a.error&&a.error.code,rs:a.readyState});a.addEventListener('loadedmetadata',()=>{ev=true;f()});a.addEventListener('error',f);a.load();setTimeout(f,15000)}));console.log('audio meta',JSON.stringify(meta));
+await h.ck('팟캐스트: loadedmetadata 발생',async()=>meta.ev===true);
+await h.ck(`팟캐스트: duration ≈ 1553 s (실측 ${meta.d})`,async()=>Math.abs(meta.d-1553.3)<2);
+const play=await p.$eval('[data-testid=audio]',a=>new Promise(async res=>{a.muted=true;const t0=a.currentTime;try{await a.play()}catch(e){return res({err:String(e)})}setTimeout(()=>{const t1=a.currentTime;a.pause();res({t0,t1,paused:a.paused})},2500)}));console.log('audio play',JSON.stringify(play));
+await h.ck(`팟캐스트: 음소거 재생 시 currentTime 진행 (${play.t0}→${play.t1})`,async()=>typeof play.t1==='number'&&play.t1-play.t0>1);
+await S('05-podcast');
+await h.ck('페이지 JS 오류 없음',async()=>errs.length===0||errs.join(';'));
+await b.close();h.done(NAME==='private'?path.resolve(__dirname,'../private/tests/logs/e2e_web_private'):path.resolve(__dirname,'logs/e2e_web_'+NAME))})();

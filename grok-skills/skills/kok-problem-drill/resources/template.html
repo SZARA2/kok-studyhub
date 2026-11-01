@@ -1,0 +1,56 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>문제 드릴</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" onerror="window.NOKATEX=1"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="window.D&&D.remath()" onerror="window.NOKATEX=1"></script>
+<style>body{font-family:system-ui,sans-serif;background:#f3f4f6;margin:0;padding:16px}.hd{max-width:560px;margin:0 auto 8px}.hd h1{font-size:18px;margin:0}.hd p{font-size:12px;color:#6b7280;margin:2px 0}
+.dr{max-width:560px;margin:0 auto}.dr .bar{height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden}.dr .bar i{display:block;height:100%;background:#2563eb;transition:width .3s}
+.dr .chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.dr .chip{font-size:12px;padding:2px 8px;border-radius:10px;background:#eef2ff;color:#3730a3}.dr .chip.on{background:#3730a3;color:#fff}
+.dr .card{background:#fff;border-radius:14px;box-shadow:0 2px 10px #0001;padding:18px;min-height:260px}.dr .q{font-size:18px;font-weight:600;margin:6px 0 12px}
+.dr .meta{font-size:12px;color:#6b7280}.dr .opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;background:#fff;font-size:15px;cursor:pointer}
+.dr .opt.wrong{text-decoration:line-through;color:#9ca3af;background:#fef2f2}.dr .opt.right{background:#dcfce7;border-color:#16a34a}
+.dr .pop{margin-top:8px;padding:8px 10px;border-radius:8px;font-size:14px}.dr .pop.ok{background:#dcfce7}.dr .pop.no{background:#fef3c7}
+.dr .nav{display:flex;justify-content:space-between;margin-top:10px}.dr .nav button{padding:8px 14px;border-radius:8px;border:0;background:#1f2937;color:#fff}.dr .nav button:disabled{opacity:.35}
+.dpop{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) scale(1);z-index:50;min-width:180px;max-width:80vw;padding:16px 20px;border-radius:18px;text-align:center;box-shadow:0 10px 30px #0003;animation:dpin .25s ease-out;transition:opacity .4s,transform .4s;pointer-events:none}
+.dpop.heart{background:#fff1f2;color:#be123c}.dpop.sorry{background:#fffbeb;color:#92400e}.dpop .ic{font-size:40px;line-height:1}.dpop .tt{font-weight:700;font-size:18px}.dpop .mm{font-size:13px;margin-top:4px;color:#374151}
+.dpop.gone{opacity:0;transform:translate(-50%,-60%) scale(.9)}@keyframes dpin{from{transform:translate(-50%,-50%) scale(.6);opacity:0}}
+</style></head><body><div class="hd"><h1 id="t"></h1><p id="pb"></p><p id="km" data-testid="katex-status"></p></div><div id="d"></div>
+<script type="application/json" id="spec">/*__SPEC__*/</script>
+<script>/* KokDrill v1.2.0: 모든 강의 글·보기·힌트·해설은 textContent로만 넣는다(HTML 해석 안 함).
+   수식은 KaTeX auto-render(trust:false)가 텍스트 노드의 \( \)만 바꾼다. root=요소, spec=spec.json */
+function KokDrill(root,spec){
+  var Q=spec.questions,i=0,st=Q.map(function(){return{tried:[],done:false,first:null}}),popT=null;
+  var secs=[];Q.forEach(function(q,k){if(q.s)secs.push({s:q.s,k:k})});
+  function sec(k){var r=null;secs.forEach(function(x){if(x.k<=k)r=x});return r}
+  function el(tag,cls,txt,attrs){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=String(txt);if(attrs)for(var a in attrs)e.setAttribute(a,attrs[a]);return e}
+  function math(n){if(window.renderMathInElement)try{renderMathInElement(n||root,{delimiters:[{left:'\\(',right:'\\)',display:false}],throwOnError:false,trust:false})}catch(e){}}
+  function btn(txt,act,dis,tid){var b=el('button',null,txt,{'data-act':act});if(tid)b.setAttribute('data-testid',tid);if(dis)b.disabled=true;b.onclick=function(){act==='next'?next():act==='prev'?prev():restart()};return b}
+  function popup(ok,msg){var o=el('div','dpop '+(ok?'heart':'sorry'),null,{'data-testid':ok?'heart':'sorry',role:'status'});
+    o.appendChild(el('div','ic',ok?'\u2665':'\u2026'));o.appendChild(el('div','tt',ok?'정답':'아쉬움'));o.appendChild(el('div','mm',msg));
+    root.appendChild(o);math(o);clearTimeout(popT);popT=setTimeout(function(){o.classList.add('gone')},1400)}
+  function render(){root.textContent='';var w=el('div','dr');root.appendChild(w);
+    if(i>=Q.length){var sc=st.filter(function(x){return x.first===true}).length,c=el('div','card',null,{'data-testid':'score'});
+      c.appendChild(el('div','q','점수 카드'));c.appendChild(el('p',null,'첫 시도 정답 '+sc+' / '+Q.length));var n=el('div','nav');n.appendChild(btn('이전','prev'));n.appendChild(btn('다시 시작','restart'));c.appendChild(n);w.appendChild(c);return}
+    var q=Q[i],s=st[i],cs=sec(i),bar=el('div','bar'),bi=el('i');bi.style.width=(i/Q.length*100)+'%';bar.appendChild(bi);w.appendChild(bar);
+    var ch=el('div','chips');secs.forEach(function(x){ch.appendChild(el('span','chip'+(cs&&cs.k===x.k?' on':''),x.s))});w.appendChild(ch);
+    var c=el('div','card');c.appendChild(el('div','meta',(i+1)+' / '+Q.length+' · 출처종류: '+(q.src||'')+' · 정답출처: '+(q.ans_src||'')));
+    c.appendChild(el('div','meta','원문위치: '+(q.loc||'')));c.appendChild(el('div','q',q.q,{'data-testid':'q'}));
+    q.o.forEach(function(o,k){var cl=s.tried.indexOf(k)>=0?' wrong':'';if(s.done&&k===q.a)cl=' right';var b=el('button','opt'+cl,(k+1)+'. '+o,{'data-opt':k,'data-testid':'opt-'+k});b.onclick=function(){pick(k)};c.appendChild(b)});
+    if(s.done)c.appendChild(el('div','pop ok','정답! '+q.ok,{'data-testid':'pop-ok'}));else if(s.tried.length)c.appendChild(el('div','pop no','오답. 힌트: '+q.no,{'data-testid':'pop-no'}));
+    var n=el('div','nav');n.appendChild(btn('이전','prev',!i));n.appendChild(btn('다음','next',!s.done,'next'));c.appendChild(n);w.appendChild(c);math(w)}
+  function pick(k){var q=Q[i],s=st[i];if(!q||s.done)return;var ok=k===q.a;if(ok){s.done=true;if(s.first===null)s.first=true}else{if(s.tried.indexOf(k)<0)s.tried.push(k);if(s.first===null)s.first=false}render();popup(ok,ok?q.ok:q.no)}
+  function next(){if(i<Q.length&&st[i].done){i++;render()}}
+  function prev(){if(i>0){i--;render()}}
+  function restart(){i=0;st=Q.map(function(){return{tried:[],done:false,first:null}});render()}
+  var x0=null;root.addEventListener('touchstart',function(e){x0=e.touches[0].clientX});root.addEventListener('touchend',function(e){if(x0===null)return;var d=e.changedTouches[0].clientX-x0;if(d<-50)next();if(d>50)prev();x0=null});
+  render();
+  return{key:function(e){var t=e.target;if(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='SELECT'||t.isContentEditable))return false;
+    if(/^[1-4]$/.test(e.key)){pick(+e.key-1);return true}if(e.key==='ArrowRight'){next();return true}if(e.key==='ArrowLeft'){prev();return true}return false},
+    state:function(){return{i:i,n:Q.length,st:st}},remath:function(){math()}}
+}
+</script><script>
+var SPEC=JSON.parse(document.getElementById('spec').textContent);document.getElementById('t').textContent=SPEC.title||'';
+var pb=document.getElementById('pb');pb.textContent=(SPEC.problem||'')+(SPEC.source_status?' · '+SPEC.source_status:'');
+if(/^https:\/\//.test(SPEC.source_url||'')){var a=document.createElement('a');a.href=SPEC.source_url;a.rel='noopener';a.textContent=' 원문';pb.appendChild(a)}
+var D=KokDrill(document.getElementById('d'),SPEC);document.addEventListener('keydown',function(e){D.key(e)});
+window.addEventListener('load',function(){setTimeout(function(){document.getElementById('km').textContent=window.renderMathInElement?'수식: KaTeX 로드됨':'수식: KaTeX 로드 실패(인터넷 필요) - 원문 \\( \\) 표기로 표시'},300)});
+</script></body></html>

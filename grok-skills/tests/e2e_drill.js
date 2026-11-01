@@ -1,0 +1,23 @@
+const {H,chromium,CHROME}=require('./harness');const path=require('path');const SS=path.resolve(__dirname,'screenshots');const h=H('e2e_drill');
+(async()=>{const b=await chromium.launch({executablePath:CHROME});
+const p=await b.newPage({viewport:{width:800,height:900}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file://'+require('path').join(require('./harness').DEMO,'drill/drill.html'));await p.waitForTimeout(1500);
+const ks=await p.textContent('[data-testid=katex-status]').catch(()=>'(없음)');console.log('katex-status:',ks);
+await h.ck('KaTeX 로드 상태 문구 = 로드됨',async()=>ks.includes('KaTeX 로드됨'));
+await h.ck('.katex 요소 렌더 ≥1',async()=>(await p.$$('.katex')).length>0);
+const sp=await p.evaluate(()=>JSON.parse(document.getElementById('spec').textContent));const q0=sp.questions[0];const w=(q0.a+1)%q0.o.length;
+await h.ck('오답 → 줄긋기 + 아쉬움(sorry) 팝업 + 힌트, 다음 비활성',async()=>{await p.click(`[data-testid=opt-${w}]`);const c=await p.getAttribute(`[data-testid=opt-${w}]`,'class');const s=(await p.$$('[data-testid=sorry]')).length;const hint=await p.textContent('[data-testid=pop-no]');return c.includes('wrong')&&s>0&&hint.includes(q0.no)&&(await p.isDisabled('[data-testid=next]'))===true});
+await p.screenshot({path:SS+'/drill-01-wrong.png',fullPage:true});
+await h.ck('정답 → 하트 팝업 + 다음 활성',async()=>{await p.click(`[data-testid=opt-${q0.a}]`);return (await p.$$('[data-testid=heart]')).length>0&&(await p.isDisabled('[data-testid=next]'))===false});
+await p.screenshot({path:SS+'/drill-02-correct.png',fullPage:true});
+await h.ck('다음 → 2번 문제',async()=>{await p.click('[data-testid=next]');return (await p.evaluate(()=>KokDrillApi?KokDrillApi.state().i:-1).catch(async()=>{const t=await p.textContent('[data-testid=q]');return t!==q0.q?1:0}))===1});
+await h.ck('JS 오류 없음',async()=>errs.length===0||errs.join(';'));
+// XSS
+const x=await b.newPage();const xe=[];x.on('pageerror',e=>xe.push(e.message));x.on('dialog',d=>{xe.push('dialog '+d.message());d.dismiss()});
+await x.goto('file://'+require('path').join(require('./harness').DEMO,'tests/xss_drill.html'));await x.waitForTimeout(1500);
+for(const o of [0,1,2,3]){await x.click(`[data-testid=opt-${o}]`).catch(()=>{})}await x.waitForTimeout(500);
+const r=await x.evaluate(()=>({x:window.__XSS,imgs:document.querySelectorAll('#app img,[data-testid=q] img').length,scripts:[...document.scripts].filter(s=>/__XSS/.test(s.textContent)&&s.type!=='application/json').length,href:[...document.querySelectorAll('a')].filter(a=>/^javascript:/i.test(a.getAttribute('href')||'')).length}));console.log('XSS',JSON.stringify(r),xe);
+await h.ck('XSS 표본: window.__XSS 미설정, 주입 img/script/javascript: 링크 0, 대화상자 없음',async()=>r.x===undefined&&r.imgs===0&&r.scripts===0&&r.href===0&&!xe.some(e=>e.startsWith('dialog')));
+await h.ck('XSS 표본: 글자로 보임(<img 문자열이 텍스트로 표시)',async()=>(await x.textContent('body')).includes('<img'));
+await x.screenshot({path:SS+'/drill-03-xss.png',fullPage:true});
+await b.close();h.done(path.resolve(__dirname,'logs/e2e_drill'))})();

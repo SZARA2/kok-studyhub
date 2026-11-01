@@ -1,0 +1,16 @@
+{
+  "name": "kok-tests",
+  "version": "1.2.0",
+  "private": true,
+  "description": "콕 통합 스킬 회귀 테스트. H 기반 단위 테스트(음성 대조·식)는 순수 node, 브라우저 테스트만 playwright 필요.",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "scripts": {
+    "test:unit": "node negative_control.js && node test_safe_expr.js",
+    "browsers": "playwright install chromium",
+    "test": "bash run_all.sh"
+  },
+  "dependencies": {
+    "playwright": "1.59.1"
+  }
+}

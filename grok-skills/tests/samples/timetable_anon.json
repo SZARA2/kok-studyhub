@@ -1,0 +1,7 @@
+{"kind":"weekly_timetable","recurrence":"주간 반복(요일 기준)","term":null,"term_note":"익명 가상 시간표(테스트용). 학기 날짜 없음","tz":"Asia/Seoul","source":"가상 예시(실제 시간표 아님)","empty_cell_note":"빈칸은 사진에 수업이 없다는 뜻일 뿐, 사용자의 개인 일정이 비었다는 뜻이 아님","estimate_method":"가상 데이터: 격자 1시간 단위 가정, 종료 분은 예시 추정",
+"classes":[
+{"id":"a1","day":"월","title":"과목A","start":"10:00","end":"11:50","raw_label":"0107","needs_review":[{"field":"end","reason":"격자 추정(가상)"},{"field":"raw_label","reason":"앞의 0 보존 확인(날짜 아님)"}],"confirmed":false},
+{"id":"a2","day":"화","title":"과목B","start":"13:00","end":"14:15","raw_label":"B-201","needs_review":[],"confirmed":true},
+{"id":"a3","day":"수","title":"과목C","start":"16:00","end":null,"raw_label":"","needs_review":[{"field":"end","reason":"사진 아래 잘림(가상) → 종료 모름"}],"confirmed":false},
+{"id":"a4","day":"목","title":"과목D","start":"09:00","end":"10:50","raw_label":"0912","needs_review":[{"field":"end","reason":"격자 추정(가상)"}],"confirmed":false},
+{"id":"a5","day":"금","title":"과목E","start":"15:00","end":"16:50","raw_label":"E-1","needs_review":[{"field":"title","reason":"글자 흐림(가상)"}],"confirmed":false}]}
