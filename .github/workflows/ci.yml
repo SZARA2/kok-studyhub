@@ -21,6 +21,11 @@ jobs:
           cache: pip
       - run: python -m pip install -r requirements-dev.txt
       - run: python -m pytest -q
-      - run: node --check web/app.js && node --check web/legacy-bridge.js && node --check hub/app.js
+      - run: node --check web/app.js && node --check web/lesson.js && node --check web/legacy-bridge.js && node --check hub/app.js
       - run: python scripts/export_offline.py /tmp/kokbot-offline.html
       - run: docker build --build-arg REVISION=${{ github.sha }} -t kokbot-ci:${{ github.sha }} .
+      - name: Verify non-root container startup
+        run: |
+          printf '%s' '[{"name":"ci","role":"operator","key":"test-only-key-with-at-least-32-characters"}]' > "$RUNNER_TEMP/kokbot-keys.json"
+          chmod 444 "$RUNNER_TEMP/kokbot-keys.json"
+          docker run --rm --tmpfs /data:uid=10001,gid=10001,mode=700 -v "$RUNNER_TEMP/kokbot-keys.json:/keys.json:ro" -e KOKBOT_KEYS_FILE=/keys.json kokbot-ci:${{ github.sha }} python -c "from backend.main import create_app; app=create_app(); print(app.title)"

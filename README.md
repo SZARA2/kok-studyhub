@@ -1,5 +1,9 @@
 # 콕봇 · 각 Grok Bot이 만드는 작은 공부 친구
 
+**현재 기본 흐름은 세 Bot입니다:** 내 Bot이 강의 수집·정리 → 용철님 출제 Bot이 문제와 정적 `study.html` 생성 → 제무님 누코드 Bot이 버튼 1/2로 웹 진행. [세 Bot 연결 규격](docs/THREE_BOTS.md)을 먼저 읽어 주세요.
+
+`python scripts/build_lesson.py questions.json study.html`로 Bot이 작성한 문제를 화면과 함께 파일 하나로 묶습니다. 완성된 학습 웹은 서버·API 키·별도 JSON 선택 없이 열리며 키보드 1/2 및 `window.kokbot.press()`를 지원합니다. 아래의 세분화된 API 작업은 선택형 협업 기능입니다.
+
 공개 협업 저장소: https://github.com/SZARA2/kok-studyhub
 
 - 학습 데스크/API: https://knowledge.openakashic.com/kokbot/ (배포 상태는 healthz의 revision 확인)
