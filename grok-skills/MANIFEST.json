@@ -1,7 +1,8 @@
 {
  "pack": "kok-skills",
  "pack_version": "v1.2.2",
- "created": "2026-11-01 17:50:09 KST(Asia/Seoul)",
+ "pack_revision": "2026-11-01-delivery.2",
+ "created": "2026-11-01 17:52:41 KST(Asia/Seoul)",
  "source": "Reviewed fixed resource bundle; public template memory supplies the actual URL and SHA256 for automatic first-run preparation.",
  "skills": {
   "kok-concept-lab": "v1.2.2",
@@ -27,8 +28,8 @@
   },
   {
    "path": "CHANGELOG.md",
-   "sha256": "910ab9257aa1f987cb2faf5fa1e82ddce8df9ab53fc4b79c37feb536e4bc140a",
-   "bytes": 2442
+   "sha256": "30f7ea87777cad18ef41ac3406b2dbc6c5fbd5c48a8a306b4afa4f2e6e7ce2ad",
+   "bytes": 2409
   },
   {
    "path": "README.md",
@@ -37,18 +38,18 @@
   },
   {
    "path": "skills/UPDATE_PROCESS.md",
-   "sha256": "609c6297f283a6c838c1fd598fae88bc6338e476a5d3bcbadc738c28156fa454",
-   "bytes": 2311
+   "sha256": "421f6e9b6ca7aa9f9973f5cba7cfb1220435dd125ee5b179d41774f7a8754480",
+   "bytes": 2291
   },
   {
    "path": "skills/VERSIONS.md",
-   "sha256": "5c3c503155044e4e26525c32054b5dd4bd6b8192aed06c9e179f24407e86d6c9",
-   "bytes": 2750
+   "sha256": "b6e36805489ff3f3a16a26a9867dbb19d064396e707e927a36809042fc461cf3",
+   "bytes": 2728
   },
   {
    "path": "skills/kok-concept-lab/SKILL.md",
-   "sha256": "bc709bcc276d45c7fe43b0d810a0f093c051868a3a6d0790d71be2cad54f3000",
-   "bytes": 13018
+   "sha256": "96f693f9e3d9ba2102c0ff17a5056e83bc10aa2466210b10b6e4697785e8c862",
+   "bytes": 12927
   },
   {
    "path": "skills/kok-concept-lab/resources/examples/generic_info_bars.json",
@@ -82,8 +83,8 @@
   },
   {
    "path": "skills/kok-lecture-collector/SKILL.md",
-   "sha256": "28b4127321de54eba8ff02f5ecf4a0e078ce321bd5110d2e3caf85fb869a9c6f",
-   "bytes": 11643
+   "sha256": "c26bded79d335aff8d9462c197edc9a267639ddfea4e9dbc4be5df3ecd1e63fe",
+   "bytes": 11549
   },
   {
    "path": "skills/kok-lecture-collector/resources/lecture_template.md",
@@ -92,18 +93,18 @@
   },
   {
    "path": "skills/kok-onboarding/SKILL.md",
-   "sha256": "f5f527b0fd3d0923e64ffbf5cd0a07b8238df065e830c336ad1768f03247566e",
-   "bytes": 14371
+   "sha256": "401aa01c7fbf1e82c52b272ecd11c43e8318a30af42104cebbdd40e9b12a4855",
+   "bytes": 14274
   },
   {
    "path": "skills/kok-onboarding/resources/intro.md",
-   "sha256": "e1d86a266f01c117928802513878e8393f555dae8d200b56878d316f714b6b08",
-   "bytes": 180
+   "sha256": "bf471337ad8da53b1350efaa04ff4b79fcaa0ed73438a9e23b37259b9d4392ee",
+   "bytes": 179
   },
   {
    "path": "skills/kok-podcast/SKILL.md",
-   "sha256": "ebc0de3f190f75c6660b9530c90b01283ba6a9d26013e4cf91f9cb64de8dda64",
-   "bytes": 9557
+   "sha256": "df8468ddb0bae84832476712bfd500c5e0f15811866d158e34afbf212d3b6e1a",
+   "bytes": 9480
   },
   {
    "path": "skills/kok-podcast/resources/status.example.json",
@@ -112,8 +113,8 @@
   },
   {
    "path": "skills/kok-problem-drill/SKILL.md",
-   "sha256": "fe9f29c4fb5db371eb056754dc3eb3a718c814e159c2098992f89aced88d401d",
-   "bytes": 9065
+   "sha256": "454b3e0d6245d7e5e0bde38571c1ce7011ef3afdc2243e78c1ea70f9ad2d047e",
+   "bytes": 8995
   },
   {
    "path": "skills/kok-problem-drill/resources/build.py",
@@ -142,8 +143,8 @@
   },
   {
    "path": "skills/kok-router/SKILL.md",
-   "sha256": "f496135c1ecd81acfe53f4217d31d34ef8bf97bf144474f37cdc6ed571dd0282",
-   "bytes": 11887
+   "sha256": "2f8c26ff481abba1c9730677e9851d3a6d0c6eded977739622ff08bd2abbea15",
+   "bytes": 11802
   },
   {
    "path": "skills/kok-router/resources/route_table.json",
@@ -152,8 +153,8 @@
   },
   {
    "path": "skills/kok-schedule/SKILL.md",
-   "sha256": "a530b250b92b667415dccf26a2c397560951c978b92ff227d218d2069744a5c2",
-   "bytes": 13457
+   "sha256": "8e9a876588e72fadc51abab2222b82c59168f8fcf408066170f2ff455a1b73aa",
+   "bytes": 13352
   },
   {
    "path": "skills/kok-schedule/resources/schedule.example.json",
@@ -222,8 +223,8 @@
   },
   {
    "path": "tests/run_all.sh",
-   "sha256": "b9d274ebeda10738ffc4c4b5a985f9fb564e3fde161c793372f9185146a108f8",
-   "bytes": 3553
+   "sha256": "55c7b70738aefe2dbe71b2d309c20efdd7e17dec1e7326990db1843b59dc2898",
+   "bytes": 3529
   },
   {
    "path": "tests/samples/drill_xss.json",
@@ -277,8 +278,8 @@
   },
   {
    "path": "tools/make_manifest.py",
-   "sha256": "280ee700b09caea22dbba732f59d3b8647df631f812eff8067769800ef3c20f1",
-   "bytes": 2640
+   "sha256": "9ab653b681feda2052455f3bc6ebffa7501c8eba4f05875965f14c72eb0e680b",
+   "bytes": 2974
   },
   {
    "path": "tools/mkzip.py",
