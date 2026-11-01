@@ -85,7 +85,7 @@ def build(job, out, timetable=None, schedule=None, key=None, tt_only=False, pack
             status = status or {"status": "진행중", "reason": "음원 완료 상태가 아직 확인되지 않았습니다."}
             audio = copy_asset(audio_files[0], "podcast/" + audio_files[0].name) if audio_files else None
             if status.get("status") == "완료" and not audio:
-                status = dict(status, status="실패", reason="완료 상태이나 실제 음원 파일이 없습니다.")
+                status = dict(status, status="실패", label="실패", reason="완료 상태이나 실제 음원 파일이 없습니다.")
             status.setdefault("label", status.get("status", "진행중"))
             if not audio and status.get("label") == "완료":
                 status["label"] = status["status"]

@@ -8,7 +8,7 @@ await p.goto(URL);await p.waitForTimeout(1200);const S=n=>p.screenshot({path:`${
 const vis=async n=>p.isVisible('#v-'+n);
 for(const n of [1,2,3,4])await h.ck(`메뉴 ${n} 클릭으로 열림 + Esc 복귀`,async()=>{await p.click(`[data-testid=menu-${n}]`);const v=await vis(n);await p.keyboard.press('Escape');return v===true&&(await vis('home'))===true});
 for(const n of [1,2,3,4])await h.ck(`메뉴 ${n} 키보드로 열림 + Esc 복귀`,async()=>{await p.keyboard.press(String(n));const v=await vis(n);await p.keyboard.press('Escape');return v===true&&(await vis('home'))===true});
-await h.ck('홈 스킬 표기 v1.2.0 (1~4)',async()=>{const t=await p.textContent('#menu');return (t.match(/v1\.2\.0/g)||[]).length===4});
+await h.ck('홈 스킬 표기가 현재 MANIFEST 버전과 일치 (1~4)',async()=>{const t=await p.textContent('#menu');const version=require('../MANIFEST.json').pack_version;return t.split(version).length-1===4});
 await p.keyboard.press('1');const q0=await p.evaluate(()=>DATA.drill.questions[0]);const wrong=(q0.a+1)%4;
 await h.ck('드릴: 오답 → 줄긋기 + 아쉬움 팝업/힌트, 다음 비활성',async()=>{await p.keyboard.press(String(wrong+1));const cls=await p.getAttribute(`[data-opt="${wrong}"]`,'class');const hint=await p.textContent('[data-testid=pop-no]');const dis=await p.isDisabled('[data-testid=next]');await S('01-drill-wrong');return cls.includes('wrong')&&hint.includes(q0.no)&&dis===true});
 await h.ck('드릴: 드릴 안 1~4는 메뉴 전환 아님',async()=>(await vis(1))===true&&(await vis(3))===false);

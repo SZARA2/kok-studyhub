@@ -78,9 +78,10 @@ class PartialWebTests(unittest.TestCase):
 
     def test_complete_podcast_without_audio_is_not_success(self):
         self.lecture()
-        self.put("podcast/status.json", {"status": "완료", "label": "완료"})
+        self.put("podcast/status.json", {"status": "완료", "label": "완료 · 생성됨"})
         data = self.run_build()
         self.assertEqual(data["modes"]["2"]["status"], "실패")
+        self.assertEqual(data["modes"]["2"]["status_label"], "실패")
         with self.assertRaises(ValueError):
             verify(self.out, require_mode=2)
 
