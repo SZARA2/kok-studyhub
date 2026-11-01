@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.env
+.env.*
+!.env.example
+data/
+runtime/
+*.sqlite*
+*.log
+hub/data/
+hub/추가자료/
+node_modules/
+.coverage

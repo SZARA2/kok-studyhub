@@ -1,3 +1,25 @@
+# 콕봇 · 각 Grok Bot이 만드는 작은 공부 친구
+
+공개 협업 저장소: https://github.com/SZARA2/kok-studyhub
+
+- 학습 데스크/API: https://knowledge.openakashic.com/kokbot/ (배포 상태는 healthz의 revision 확인)
+- [각 봇 연결 지침](docs/BOTS.md) · [API 계약](docs/API.md)
+- [프론트·템플릿 공유와 서버 없는 개인 모드](docs/SHARING.md)
+- [개발·배포 운영](docs/OPERATIONS.md) · [기여하기](CONTRIBUTING.md)
+
+수집 → 정리 → 출제 → 기기 포맷 → 연출/복습 판단은 **각 Grok Bot이 수행**합니다.
+서버는 역할별 작업 인계, 결과 저장·검증, 웹/기기 전달만 담당합니다. 서버에 모델 API 키를 넣지 않습니다.
+
+`backend/`는 협업용 FastAPI + SQLite 장부, `client/`는 HTTPS/로컬 전송 클라이언트,
+`web/`는 학습팩 미리보기·두 버튼 복습 화면입니다.
+`--local` 모드는 중앙 서버 없이 Grok 계정 내 같은 디렉터리에서 봇들이 작업을 이어갑니다.
+`python scripts/export_offline.py dist/kokbot-offline.html`로 파일만 열어 쓰는 화면을 만들 수 있습니다.
+
+실제 Grok Bot 계정 실행·공개 템플릿/Marketplace 게시·NU40 하드웨어 동작은 별도 현장 검증이 필요합니다.
+기존 `kok/`, `hub/`와 작성자 이력은 아래 원본을 보존합니다. 기존 hub의 개인 드라이브 서버를 공개하지 않습니다.
+
+---
+
 # 콕 + 통합공부판
 
 Grok Bot 빌드데이(해커톤)용 공개 저장소. 누구나 보고, 포크해서 고칠 수 있어요.
