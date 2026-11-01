@@ -21,10 +21,10 @@ function toast(t, ms){ const el = $('toast'); el.textContent = t; el.classList.a
 async function api(path, opt){
   try { const r = await fetch(path, Object.assign({ cache: 'no-store' }, opt || {})); if (r.ok && (r.headers.get('content-type') || '').includes('json')) return r.json(); throw new Error(path + ' ' + r.status); }
   catch (e) {
-    if (/^\/api\/meta/.test(path)) return (await fetch('meta.json', { cache: 'no-store' })).json();
+    if (/^\/api\/meta/.test(path)) return Object.assign(await (await fetch('meta.json', { cache: 'no-store' })).json(), { staticSnapshot: true });
     if (/^\/api\/extras/.test(path)) return { files: {}, links: [], memos: {} };
     if (!opt || !opt.method || opt.method === 'GET') return {};
-    return { ok: true, static: true };
+    toast('서버에 저장하지 못했습니다. 이 공부판은 예시 화면입니다.'); throw e;
   }
 }
 
@@ -493,7 +493,7 @@ async function boot(){
   await checkImport(false);
   await Promise.all([loadExtras(), loadHack()]);
   renderSide();
-  $('sFoot').innerHTML = '<span class="ok">서버 연결됨</span> · ' + esc(MT.built.slice(5, 16));
+  $('sFoot').innerHTML = '<span class="ok">예시 스냅샷 · 서버 저장 안 됨</span> · ' + esc(MT.built.slice(5, 16));
   const hp = {}; location.hash.slice(1).split('&').forEach(s => { const i = s.indexOf('='); if (s) hp[i < 0 ? s : s.slice(0,i)] = i < 0 ? '1' : decodeURIComponent(s.slice(i+1)); });
   tick();
   if (hp.v === 'subj' && META[hp.k]) { show('dash'); openSubject(hp.k, hp.card || null, hp.t || 'board'); }
