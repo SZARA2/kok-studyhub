@@ -111,7 +111,8 @@ class PartialWebTests(unittest.TestCase):
         data = self.run_build()
         self.assertEqual(data["modes"]["3"]["status"], "완료")
         self.assertEqual(data["modes"]["1"]["status"], "미생성")
-        verify(self.out, require_mode=3)
+        receipt = verify(self.out, require_mode=3)
+        self.assertIn('lab/lab3d.html', [item['path'] for item in receipt['attachments']])
 
     def test_main_html_alone_keeps_3d_and_audio(self):
         self.lecture()

@@ -83,6 +83,7 @@ def build(job, out, timetable=None, schedule=None, key=None, tt_only=False, pack
             lab, lab3d = read_json(lab_path), "lab/lab3d.html"
             lab3d_html = lab3d_path.read_text(encoding="utf-8")
             assets[lab3d] = lab3d_path
+            attachments[lab3d] = lab3d_path
             copy_asset(lab_path, "lab/lab.json")
             modes["3"] = mode("개념 실험실", "kok-concept-lab", "완료")
 
@@ -167,8 +168,6 @@ def build(job, out, timetable=None, schedule=None, key=None, tt_only=False, pack
     print("package", package)
     for relative, path in sorted(attachments.items()):
         print("direct_attachment", path)
-    if lab3d:
-        print("direct_attachment", out.parent / lab3d)
     return data
 
 

@@ -67,6 +67,8 @@ def verify(html, package=None, require_mode=None):
             raise ValueError("standard drill output missing")
     if receipt["modes"]["3"]["status"] == "완료" and "lab/lab3d.html" not in expected:
         raise ValueError("3D asset missing")
+    if receipt["modes"]["3"]["status"] == "완료" and "lab/lab3d.html" not in {item["path"] for item in receipt.get("attachments", [])}:
+        raise ValueError("direct 3D attachment missing")
     if data.get("podcast") and data["podcast"].get("audio"):
         direct = data["podcast"]["audio"]
         if direct not in {item["path"] for item in receipt.get("attachments", [])}:

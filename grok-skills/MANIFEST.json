@@ -1,8 +1,8 @@
 {
  "pack": "kok-skills",
  "pack_version": "v1.2.3",
- "pack_revision": "2026-11-01-direct-preview.1",
- "created": "2026-11-01 18:09:11 KST(Asia/Seoul)",
+ "pack_revision": "2026-11-01-direct-preview.2",
+ "created": "2026-11-01 18:16:05 KST(Asia/Seoul)",
  "source": "Reviewed fixed resource bundle; public template memory supplies the actual URL and SHA256 for automatic first-run preparation.",
  "skills": {
   "kok-concept-lab": "v1.2.3",
@@ -73,8 +73,8 @@
   },
   {
    "path": "skills/kok-concept-lab/resources/safe_expr.js",
-   "sha256": "ce1e818e5e7bf109f99572e7c94019acf6857cb4fcfee8dfb9b481029314f4f8",
-   "bytes": 4343
+   "sha256": "d9cedeb963111a2883e585c9e1599f495b5b6a312a96f3601a8e40e4344cfd23",
+   "bytes": 4351
   },
   {
    "path": "skills/kok-concept-lab/resources/safe_expr.py",
@@ -263,8 +263,8 @@
   },
   {
    "path": "tests/test_partial_web.py",
-   "sha256": "95df28d5f496feb6bd965d93b6d6615a365d018c9c335ec98ead995562e21fa1",
-   "bytes": 7903
+   "sha256": "fe9f658549fa0520a935a5ee39eda613ce2a0972029f362700d898a6a8c41153",
+   "bytes": 8004
   },
   {
    "path": "tests/test_safe_expr.js",
@@ -273,8 +273,8 @@
   },
   {
    "path": "tools/build_web.py",
-   "sha256": "c97a7e301c84bb4f3f39e92c494ea87480dae2aea11e06779d257fc4b73b17c7",
-   "bytes": 10635
+   "sha256": "3fe0869c3c1877cd4e2e9487816a028b47f70bc05a2e8e548d766cc092313bb0",
+   "bytes": 10610
   },
   {
    "path": "tools/lecture_metadata.py",
@@ -283,7 +283,7 @@
   },
   {
    "path": "tools/make_manifest.py",
-   "sha256": "1562df80531a66c384810e44f6c0958003d5e5240079c64d78e3cfefb337a5a6",
+   "sha256": "feb56c525f2030ec7da580f53684f3dd86f89f8affef5b53ad297370b6a5b215",
    "bytes": 3040
   },
   {
@@ -313,8 +313,8 @@
   },
   {
    "path": "tools/verify_web.py",
-   "sha256": "8bea72bbe488f466ceab36d54a9ec1f88aea47a29677aace6ef812ff8130be36",
-   "bytes": 4568
+   "sha256": "81b6dd8a34fe513603bc31af365dbb1801c78e04d4f5ae82592e74b0ee623849",
+   "bytes": 4763
   },
   {
    "path": "tools/web_template.html",

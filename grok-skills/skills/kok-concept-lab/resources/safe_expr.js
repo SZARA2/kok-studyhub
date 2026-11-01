@@ -1,4 +1,4 @@
-/* SafeExpr: lab expr 전용 토크나이저·파서. eval/new Function을 쓰지 않는다.
+/* SafeExpr: lab expr 전용 토크나이저·파서. 문자열을 코드로 실행하지 않는다.
    허용: 숫자, 선언된 변수 이름, + - * / % **(^ 아님), 단항 + -, 괄호, Math.<허용 함수>(...)/Math.PI/Math.E, 쉼표(함수 인자).
    그 밖(문자열, 대입, =>, [], {}, ., 다른 이름 호출, window/document/constructor 등)은 Error로 거부하고 실행하지 않는다.
    결과는 클로저로 컴파일되어 (식,이름집합) 단위로 캐시된다. */
