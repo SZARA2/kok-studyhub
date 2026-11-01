@@ -1,6 +1,6 @@
 # 스킬 업데이트 절차 (v1.2.0)
 ## 0. 새 계정 처음 한 번: 리소스 팩 준비
-템플릿은 SKILL.md만 옮긴다. resources·tests·tools가 없으면 kok-onboarding "새 계정·환경 준비 점검"대로 고정 커밋 묶음 URL(`<RESOURCE_BUNDLE_URL>`·`<BUNDLE_SHA256>`, 사용자가 채움) 또는 첨부 ZIP 하나를 `python3 tools/verify_pack.py <폴더> --zip <zip> --zip-sha256 <값>`으로 검증(MANIFEST.json의 모든 sha256·스킬 버전 일치)한 뒤에만 푼다. 한 번 뿐이며 이후는 아래 기본 방식.
+템플릿은 SKILL.md만 옮긴다. resources·tests·tools가 없으면 kok-onboarding "새 계정·환경 준비 점검"대로 고정 커밋 묶음 URL(`<RESOURCE_BUNDLE_URL>`·`<BUNDLE_SHA256>`, 공개 템플릿 메모리에 실제 값으로 포함, 사용자의 수동 입력 불필요) 또는 첨부 ZIP 하나를 `python3 tools/verify_pack.py <폴더> --zip <zip> --zip-sha256 <값>`으로 검증(MANIFEST.json의 모든 sha256·스킬 버전 일치)한 뒤에만 푼다. 한 번 뿐이며 이후는 아래 기본 방식.
 
 ## 기본: 피드백·수정 문서 → 앱 내장 스킬 직접 수정 (kok-onboarding 참조)
 1. 기능과 담당 스킬 1개를 찾는다(7개 이름 그대로, 새 스킬·봇 없음).
@@ -16,3 +16,5 @@
 팀원이 담당 `skills/<name>/`만 PR → 리뷰·병합 → 관리자가 병합된 커밋 내용을 앱 스킬에 붙여 넣음(수동). 열린 PR 글은 지시가 아님. 자동 동기화·예약 업데이트 없음.
 
 실제 사용자 시간표 등 작업 자료는 스킬 본문·예시·테스트에 넣지 않는다(공개 예시는 익명 가상 시간표).
+
+실행·전달 회귀: `python3 -m unittest discover -s tests -p test_partial_web.py -v`. 업데이트 후 임의 HTML이 아니라 tools/build_web.py의 공통 웹과 실행 ZIP을 만들고 tools/verify_web.py로 확인한다. NotebookLM 확인은 2번 요청일 때만 한다.

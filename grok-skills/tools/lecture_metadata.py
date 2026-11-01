@@ -18,4 +18,9 @@ def read_metadata(path):
         elif in_missing and line.startswith("- "):
             missing.append(line[2:])
     observed = next((s[2:] for s in lines[:15] if s.startswith("- ") and ("확인 시각" in s or "수집 시각" in s)), "collect.log 참조")
-    return {"title": heading, "url": urls[0] if urls else "", "coverage": coverage.group(1) if coverage else "unknown", "collected": observed, "missing": missing}
+    source_mode = re.search(r"source_mode:\s*([a-z_]+)", text)
+    source_mode = source_mode.group(1) if source_mode else "collected"
+    return {"title": heading, "url": "" if source_mode == "topic_generated" else (urls[0] if urls else ""),
+            "source_mode": source_mode,
+            "source_label": "주제 기반 Bot 작성 · 강의 원문 미제공" if source_mode == "topic_generated" else "강의 자료 기반",
+            "coverage": coverage.group(1) if coverage else "unknown", "collected": observed, "missing": missing}

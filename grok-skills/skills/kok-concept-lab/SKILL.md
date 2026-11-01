@@ -6,7 +6,7 @@ description: '콕 통합 3번: 공통 lecture.md에 근거한 개념 하나를 �
 
 | 항목 | 내용 |
 |---|---|
-| 버전 | v1.2.1 |
+| 버전 | v1.2.2 |
 | 담당자 | 용철 (추후 누코드 연동=제무, 이번 미구현) |
 | 유래 | concept-lab-visualizer (sha256 `67830555b31385cce5933e3ac0fb9b1a0aaaaff7d0f3420a140a6e375521b1a1`) · upstream-latest concept-lab-visualizer (sha256 `d4d10c0f9909620d69003aef518822661ea4c65f2615b2089eeba6647dc1109a`) |
 | 입력 | 공통 `lecture.md` |
@@ -23,6 +23,7 @@ description: '콕 통합 3번: 공통 lecture.md에 근거한 개념 하나를 �
 - [ ] e2e_lab3d·test_safe_expr·negative_control 엄격 검사(=== true) 통과, 로그 tests/logs
 
 ## 변경이력
+- v1.2.2 (2026-11-01): 지정 생성기·부분 생성·실행 ZIP·출처 표시·2번 전용 로그인 계약 통합. 원본 유래 sha256 유지.
 - v1.2.1 (2026-11-01): 주제만 받은 요청도 HTML 웹으로 완료하는 공통 실행 규칙과 정합. 원본 유래 sha256은 기존 값 유지.
 - v1.2.0 보완 (2026-11-01): 식 상한·유한성 검사, max_var 자동 맞춤 안내, 색 범례를 본문 규칙으로 명시(다른 장면에도 적용).
 - v1.2.0 (2026-11-01): upstream-latest concept-lab-visualizer (sha256 `d4d10c0f9909620d69003aef518822661ea4c65f2615b2089eeba6647dc1109a`) 병합.
@@ -72,6 +73,16 @@ description: '콕 통합 3번: 공통 lecture.md에 근거한 개념 하나를 �
 - Three.js r160을 CDN(jsdelivr)에서 불러온다: 열 때 인터넷 필요(화면에 표시). 불러오기 실패·시간 초과면 2D 대체 캔버스와 오류 문구를 보이고 `LAB3D.status='fallback'`. 실제로 불러왔을 때(`status==='3d'`)만 3D 성공이라고 보고한다.
 - 만들기: `python3 resources/make_lab3d.py lab.json lab3d.html` (DATA 자리 `const DATA=/*LAB_JSON*/null;`, `<`는 `\u003c`로 escape). 예시: `resources/examples/generic_info_bars.json`.
 - 검증: `python3 tests/regress.py lab lab.json`(허용목록·기본값·극단값·checks), `node tests/test_safe_expr.js`(거부 표본 실행 없음 + 기본/극단/검산), `node tests/e2e_lab3d.js`(swiftshader: WebGL 픽셀, 슬라이더, 덮개·도장, 처음 보기, 유휴/숨김 정지, 나쁜 식 오류, CDN 차단 대체). 로그는 `tests/logs/*.log`(종료코드 포함), 캡처는 `tests/screenshots/`. 검사는 값이 정확히 true일 때만 PASS, FAIL이 있으면 종료코드 1, 음성 대조 `tests/negative_control.js`.
+
+## 실행·전달 계약 (v1.2.2)
+- 기본 결과는 지정된 공통 학습 웹이다. 'HTML이면 완료'가 아니다. 매번 임의 HTML/채점 페이지를 새로 작성하지 않는다. 특히 Q 배열과 grade()만 있는 일괄 채점 웹으로 kok-problem-drill을 대체하지 않는다.
+- 1~3번은 먼저 같은 작업 폴더의 lecture.md를 준비한다. 주제만 있으면 수집 스킬의 topic_generated 모드를 쓰고 원문 미제공 표시를 유지한다. 4번은 시간표만으로 가능하다.
+- 선택한 스킬의 데이터만 만든다. 1번=drill/spec.json, 2번=podcast/status.json과 실제 음원(없으면 진행중/미연결), 3번=lab/lab.json, 4번=schedule/timetable.json·schedule.json. 요청하지 않은 기능 생성·NotebookLM 로그인·시간표 요구는 하지 않는다.
+- 실제 리소스 루트에서 `python3 tools/build_web.py <작업폴더> --out <작업폴더>/web/index.html`을 실행한다. 이 생성기는 고정 드릴·실험실 화면을 쓰고, 없는 기능은 미생성/자료 필요로 표시하며 index.html·build-receipt.json·kok-study-web.zip을 만든다. 다른 기능 파일이 없어도 성공해야 한다.
+- `python3 tools/verify_web.py <작업폴더>/web/index.html --require-mode <선택번호>`가 통과해야 완료다. 2번 음원 준비 중에는 --require-mode 없이 검사하고 '진행중/미연결'을 알리며 완료라 하지 않는다. 임의 HTML·파일 누락 ZIP은 실패로 처리한다.
+- 브라우저에서 선택한 기능을 실제로 조작한다. 1번은 오답 줄긋기+힌트, 정답 후에만 다음, 홈 1~4와 드릴 보기 1~4 구분을 확인한다. 테스트 없이 성공했다고 쓰지 않는다.
+- 채팅에 index.html과 kok-study-web.zip을 함께 첨부한다. ZIP은 오디오·3D·드릴·lecture.md·일정 등 해당 실행에 필요한 파일과 해시 영수증을 포함한다. 사용자에게 ZIP 전체를 풀고 index.html을 열도록 한 줄로 안내한다. 실행 결과 ZIP은 개인 자료일 수 있으므로 공개 템플릿에 넣지 않는다.
+- NotebookLM 로그인 확인은 2번 팟캐스트를 요청했을 때만 한다. 퀴즈·수집·3D·일정은 Google 로그인 없이 진행한다. 새 계정·키·유료 플랜·중앙 백엔드는 만들지 않는다.
 
 ## 순서
 1. lecture.md에서 공식+변수로 표현되는 개념 하나를 고른다(여러 개면 시각화 효과가 큰 것).

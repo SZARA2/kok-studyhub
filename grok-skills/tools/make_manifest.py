@@ -17,10 +17,16 @@ def files():
 def sha(p):return hashlib.sha256(open(os.path.join(R,p),'rb').read()).hexdigest()
 def ver(p):
     m=re.search(r'\|\s*버전\s*\|\s*(v[\d.]+)',open(os.path.join(R,p),encoding='utf-8').read());return m.group(1) if m else None
-F=[{"path":p,"sha256":sha(p),"bytes":os.path.getsize(os.path.join(R,p))} for p in files()]
+previous=os.path.join(R,'MANIFEST.json')
+paths=[x['path'] for x in json.load(open(previous,encoding='utf-8'))['files']] if os.path.exists(previous) else list(files())
+# Explicit release additions keep unrelated working files out of public packs.
+paths=sorted(set(paths+['tools/verify_web.py','tests/test_partial_web.py']))
+F=[{"path":p,"sha256":sha(p),"bytes":os.path.getsize(os.path.join(R,p))} for p in paths]
 S={p.split('/')[1]:ver(p) for p in (x['path'] for x in F) if re.fullmatch(r'skills/kok-[\w-]+/SKILL\.md',p)}
-M={"pack":"kok-skills","pack_version":"v1.2.0","created":datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+' KST(Asia/Seoul)',
-   "source":"로컬 빌드(공개 고정 커밋 URL은 사용자가 템플릿 지침에 넣을 때만 사용: <RESOURCE_BUNDLE_URL>, <BUNDLE_SHA256>)",
+versions=set(S.values())
+if len(versions)!=1 or None in versions:raise ValueError('all seven skill versions must match')
+M={"pack":"kok-skills","pack_version":next(iter(versions)),"created":datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime('%Y-%m-%d %H:%M:%S')+' KST(Asia/Seoul)',
+   "source":"Reviewed fixed resource bundle; public template memory supplies the actual URL and SHA256 for automatic first-run preparation.",
    "skills":S,"requires":{"python3":">=3.9","node":">=18","playwright(npm, tests/만)":"1.59.1","chromium":"playwright 기본 경로 또는 KOK_CHROME","ffmpeg/ffprobe":"팟캐스트 음원 확인용(선택)"},
    "files":F,"file_count":len(F)}
 json.dump(M,open(out,'w',encoding='utf-8'),ensure_ascii=False,indent=1);print('manifest',out,len(F),'files',S)

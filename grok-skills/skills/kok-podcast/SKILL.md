@@ -8,7 +8,7 @@ description: >-
 
 | 항목 | 내용 |
 |---|---|
-| 버전 | v1.2.1 |
+| 버전 | v1.2.2 |
 | 담당자 | 용철 (추후 누코드 연동=제무, 이번 미구현) |
 | 유래 | notebooklm-studio-pack (sha256 `7c2050db94a64682553f126e3d7fa7124c2e71992bc868be327ce0eb976db176`) · upstream-latest notebooklm-studio-pack (sha256 `9c8569368d1fa42c0d8a3fabeb8f97aa6c75fc8f0429fb404cc6b48dc2fdb526`) |
 | 입력 | 공통 `lecture.md` |
@@ -26,6 +26,7 @@ description: >-
 - [ ] 브라우저 audio.mp3 loadedmetadata·duration·재생 진행 확인
 
 ## 변경이력
+- v1.2.2 (2026-11-01): 지정 생성기·부분 생성·실행 ZIP·출처 표시·2번 전용 로그인 계약 통합. 원본 유래 sha256 유지.
 - v1.2.1 (2026-11-01): 주제만 받은 요청도 HTML 웹으로 완료하는 공통 실행 규칙과 정합. 원본 유래 sha256은 기존 값 유지.
 - v1.2.0 (2026-11-01): upstream-latest notebooklm-studio-pack (sha256 `9c8569368d1fa42c0d8a3fabeb8f97aa6c75fc8f0429fb404cc6b48dc2fdb526`) 병합.
   - 채택: 기본 한국어·짧게(5~8분), mp3 mono 64k 변환(25MB 초과 48k), 중간 텍스트 먼저(요약 2~4문장+핵심 개념 2개), 소스 = lecture.md 1개 + URL 1개, 1분 간격 최대 약 12분 확인, 생성 중을 완료라 말하지 않음
@@ -54,6 +55,17 @@ description: >-
 - 웹 플레이어는 `podcast/audio.mp3`를 가리킨다(웹 파일 옆 상대 경로).
 - 기다리는 동안 먼저 중간 안내를 채팅으로 보낸다: 듣기용 요약 2~4문장 + 핵심 개념 2개(lecture.md 근거 위치 포함), `podcast/interim.md`에도 저장. 완료 확인은 약 1분 간격, 최대 약 12분. 넘으면 상태(진행중)와 노트북 링크만 전한다.
 - 길이 표기는 실제 ffprobe 값으로만. 이미 만든 다른 길이의 음원을 5~8분이라고 부르지 않는다(예: 데모 음원은 "기존 샘플 25분 53초(심층 분석), 새 기본값 5~8분 이전에 생성").
+
+## 실행·전달 계약 (v1.2.2)
+- source_mode: topic_generated 또는 파일만 받은 경우 NotebookLM에는 lecture.md만 올린다. 원본 URL이 실제로 제공된 때만 웹사이트 소스를 추가하며 URL을 꾸며내거나 추가 입력을 강제하지 않는다.
+- 기본 결과는 지정된 공통 학습 웹이다. 'HTML이면 완료'가 아니다. 매번 임의 HTML/채점 페이지를 새로 작성하지 않는다. 특히 Q 배열과 grade()만 있는 일괄 채점 웹으로 kok-problem-drill을 대체하지 않는다.
+- 1~3번은 먼저 같은 작업 폴더의 lecture.md를 준비한다. 주제만 있으면 수집 스킬의 topic_generated 모드를 쓰고 원문 미제공 표시를 유지한다. 4번은 시간표만으로 가능하다.
+- 선택한 스킬의 데이터만 만든다. 1번=drill/spec.json, 2번=podcast/status.json과 실제 음원(없으면 진행중/미연결), 3번=lab/lab.json, 4번=schedule/timetable.json·schedule.json. 요청하지 않은 기능 생성·NotebookLM 로그인·시간표 요구는 하지 않는다.
+- 실제 리소스 루트에서 `python3 tools/build_web.py <작업폴더> --out <작업폴더>/web/index.html`을 실행한다. 이 생성기는 고정 드릴·실험실 화면을 쓰고, 없는 기능은 미생성/자료 필요로 표시하며 index.html·build-receipt.json·kok-study-web.zip을 만든다. 다른 기능 파일이 없어도 성공해야 한다.
+- `python3 tools/verify_web.py <작업폴더>/web/index.html --require-mode <선택번호>`가 통과해야 완료다. 2번 음원 준비 중에는 --require-mode 없이 검사하고 '진행중/미연결'을 알리며 완료라 하지 않는다. 임의 HTML·파일 누락 ZIP은 실패로 처리한다.
+- 브라우저에서 선택한 기능을 실제로 조작한다. 1번은 오답 줄긋기+힌트, 정답 후에만 다음, 홈 1~4와 드릴 보기 1~4 구분을 확인한다. 테스트 없이 성공했다고 쓰지 않는다.
+- 채팅에 index.html과 kok-study-web.zip을 함께 첨부한다. ZIP은 오디오·3D·드릴·lecture.md·일정 등 해당 실행에 필요한 파일과 해시 영수증을 포함한다. 사용자에게 ZIP 전체를 풀고 index.html을 열도록 한 줄로 안내한다. 실행 결과 ZIP은 개인 자료일 수 있으므로 공개 템플릿에 넣지 않는다.
+- NotebookLM 로그인 확인은 2번 팟캐스트를 요청했을 때만 한다. 퀴즈·수집·3D·일정은 Google 로그인 없이 진행한다. 새 계정·키·유료 플랜·중앙 백엔드는 만들지 않는다.
 
 ## 순서 (원본 브라우저 흐름 유지)
 1. lecture.md로 `notebooklm/source.md`(업로드용, 출처 구분 표시 유지)와 `podcast_script.md`(진행자 2명 한국어 대화, 참고용)를 만든다.

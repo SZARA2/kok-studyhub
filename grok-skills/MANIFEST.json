@@ -1,306 +1,315 @@
 {
-  "pack": "kok-skills",
-  "pack_version": "v1.2.1",
-  "created": "2026-11-01 16:30:13 KST(Asia/Seoul)",
-  "source": "Reviewed public resource bundle derived from the app v1.2.0 export; workflow updates remain feedback-based.",
-  "skills": {
-    "kok-concept-lab": "v1.2.1",
-    "kok-lecture-collector": "v1.2.1",
-    "kok-onboarding": "v1.2.1",
-    "kok-podcast": "v1.2.1",
-    "kok-problem-drill": "v1.2.1",
-    "kok-router": "v1.2.1",
-    "kok-schedule": "v1.2.1"
+ "pack": "kok-skills",
+ "pack_version": "v1.2.2",
+ "created": "2026-11-01 17:50:09 KST(Asia/Seoul)",
+ "source": "Reviewed fixed resource bundle; public template memory supplies the actual URL and SHA256 for automatic first-run preparation.",
+ "skills": {
+  "kok-concept-lab": "v1.2.2",
+  "kok-lecture-collector": "v1.2.2",
+  "kok-onboarding": "v1.2.2",
+  "kok-podcast": "v1.2.2",
+  "kok-problem-drill": "v1.2.2",
+  "kok-router": "v1.2.2",
+  "kok-schedule": "v1.2.2"
+ },
+ "requires": {
+  "python3": ">=3.9",
+  "node": ">=18",
+  "playwright(npm, tests/만)": "1.59.1",
+  "chromium": "playwright 기본 경로 또는 KOK_CHROME",
+  "ffmpeg/ffprobe": "팟캐스트 음원 확인용(선택)"
+ },
+ "files": [
+  {
+   "path": "ATTRIBUTION.md",
+   "sha256": "563285074c7510fa88247f18e71f9750c395b2fa7b91b0161c6512dc4c1ffe9a",
+   "bytes": 1121
   },
-  "requires": {
-    "python3": ">=3.9",
-    "node": ">=18",
-    "playwright(npm, tests/만)": "1.59.1",
-    "chromium": "playwright 기본 경로 또는 KOK_CHROME",
-    "ffmpeg/ffprobe": "팟캐스트 음원 확인용(선택)"
+  {
+   "path": "CHANGELOG.md",
+   "sha256": "910ab9257aa1f987cb2faf5fa1e82ddce8df9ab53fc4b79c37feb536e4bc140a",
+   "bytes": 2442
   },
-  "files": [
-    {
-      "path": "ATTRIBUTION.md",
-      "bytes": 1121,
-      "sha256": "563285074c7510fa88247f18e71f9750c395b2fa7b91b0161c6512dc4c1ffe9a"
-    },
-    {
-      "path": "CHANGELOG.md",
-      "bytes": 2200,
-      "sha256": "9d4e26c779c8973476cc7281a1b357b8fadede696624d17944d2750851af0a6f"
-    },
-    {
-      "path": "README.md",
-      "bytes": 3679,
-      "sha256": "fc65ccdaf9d408c295e3e8fcda2e9c971366057b295039693d8cad15842fade9"
-    },
-    {
-      "path": "skills/UPDATE_PROCESS.md",
-      "bytes": 1938,
-      "sha256": "48e9fefe80b3d6ef04dfc5351551b4cd79197d90a7f6aacac159099a5c07f77b"
-    },
-    {
-      "path": "skills/VERSIONS.md",
-      "bytes": 2613,
-      "sha256": "a6ad49e2cd2f86871765302d6d3f6eff0c701a42e43ac7e9844f6ffe30447592"
-    },
-    {
-      "path": "skills/kok-concept-lab/SKILL.md",
-      "bytes": 10465,
-      "sha256": "d074f1c9bb4d2c536b22f75caa40294e8abe7d9fedaecc19b5deeb95f9857b92"
-    },
-    {
-      "path": "skills/kok-concept-lab/resources/examples/generic_info_bars.json",
-      "bytes": 4520,
-      "sha256": "ed68ea44dd0ddeeedeb4a7115eacfec7a42c303ab643de2b6d1632617da51c5d"
-    },
-    {
-      "path": "skills/kok-concept-lab/resources/lab.schema.md",
-      "bytes": 271,
-      "sha256": "f8e0c53790d07ce0a5830879d8c07feaafd4acb81d1a1e92e29bf5b670d89292"
-    },
-    {
-      "path": "skills/kok-concept-lab/resources/lab3d_template.html",
-      "bytes": 18925,
-      "sha256": "566ec0055c1cd4e93f6e17b0ff657ded9ab42478a7858b14683a31ed1a026963"
-    },
-    {
-      "path": "skills/kok-concept-lab/resources/make_lab3d.py",
-      "bytes": 1579,
-      "sha256": "7bffd2edadcbcb0fa164b98cc09c25fbc5f717ec3719553b876c72d34915fd72"
-    },
-    {
-      "path": "skills/kok-concept-lab/resources/safe_expr.js",
-      "bytes": 4343,
-      "sha256": "ce1e818e5e7bf109f99572e7c94019acf6857cb4fcfee8dfb9b481029314f4f8"
-    },
-    {
-      "path": "skills/kok-concept-lab/resources/safe_expr.py",
-      "bytes": 3783,
-      "sha256": "31cf44a10eb79c33d3338193da080b8861a7592da1951d014de868f24a711f3e"
-    },
-    {
-      "path": "skills/kok-lecture-collector/SKILL.md",
-      "bytes": 9087,
-      "sha256": "621b014cd050b65ca15a303806248d1b1196aad076a230a1f226304568c471a8"
-    },
-    {
-      "path": "skills/kok-lecture-collector/resources/lecture_template.md",
-      "bytes": 912,
-      "sha256": "ede56e45c8f837ab53242c4d296c264a490e129923197cdaf959b3b59320b501"
-    },
-    {
-      "path": "skills/kok-onboarding/SKILL.md",
-      "bytes": 11680,
-      "sha256": "18ce7245ecdaad3f59f612b0b763cdd918341e6601bba625c86dc6096c204d3e"
-    },
-    {
-      "path": "skills/kok-onboarding/resources/intro.md",
-      "bytes": 224,
-      "sha256": "adb35dfe9cc1b84825b3be412122f959f57cc50398288c8e62bb4a76c5753be9"
-    },
-    {
-      "path": "skills/kok-podcast/SKILL.md",
-      "bytes": 6773,
-      "sha256": "6c253af590efba35808e2042dead6b0ccb825edc53f26e7174c62fa752bf2949"
-    },
-    {
-      "path": "skills/kok-podcast/resources/status.example.json",
-      "bytes": 117,
-      "sha256": "f47eac59dbf2a8daedd9bc849ea5c21e57faff3cd35fc591d0499cc02e89215e"
-    },
-    {
-      "path": "skills/kok-problem-drill/SKILL.md",
-      "bytes": 6533,
-      "sha256": "2d8ab01322d2a3d80b6a57d6ea77883c3178a1fd5e2c700dab2456652e36ba9e"
-    },
-    {
-      "path": "skills/kok-problem-drill/resources/build.py",
-      "bytes": 1026,
-      "sha256": "d47fe300dcb2819a0a8752711fedf7b73e17f6ceffc703fc38b34c35b900d480"
-    },
-    {
-      "path": "skills/kok-problem-drill/resources/drill.css",
-      "bytes": 1871,
-      "sha256": "64cf13b5fc89b0fc7072392cd7b9183e97ccb89b6dd868d5677cdc1f2f2bec79"
-    },
-    {
-      "path": "skills/kok-problem-drill/resources/drill.js",
-      "bytes": 4160,
-      "sha256": "6b09223332ed0482299252edc61bad3c70a4bad1b0f5a106dcca1a105dd1887e"
-    },
-    {
-      "path": "skills/kok-problem-drill/resources/spec.schema.json",
-      "bytes": 787,
-      "sha256": "c1c35823c9c47da0e22ac4070b1af72147d25a0af0cdbb91e5f894faeb69523d"
-    },
-    {
-      "path": "skills/kok-problem-drill/resources/template.html",
-      "bytes": 7777,
-      "sha256": "f363c9b76b8a04eb7fb01c313b230573648445c78a1b9079892f05feecb3d8f6"
-    },
-    {
-      "path": "skills/kok-router/SKILL.md",
-      "bytes": 9340,
-      "sha256": "80ed572a3a867da4c3f3ef817d3071053d433584bff197a648400c50b3e7e45f"
-    },
-    {
-      "path": "skills/kok-router/resources/route_table.json",
-      "bytes": 246,
-      "sha256": "b09bd6fdf8484ab7eff28d59010dddd70ff84b420b2d03a346acefaf969da969"
-    },
-    {
-      "path": "skills/kok-schedule/SKILL.md",
-      "bytes": 10890,
-      "sha256": "90702e0a0242dbc83881ee420c8ac57f2a07d20fd64cefae947a9271f3a3e565"
-    },
-    {
-      "path": "skills/kok-schedule/resources/schedule.example.json",
-      "bytes": 309,
-      "sha256": "e1c5d9687cdfb68820115deaaabece63ba2ab1158c07ca8d58559469e1e0f984"
-    },
-    {
-      "path": "tests/block_playwright.js",
-      "bytes": 416,
-      "sha256": "2ba87c671abae30b4d8ff7cab14e93f6cd385f9826050321b2830198a43f9752"
-    },
-    {
-      "path": "tests/browser.js",
-      "bytes": 1519,
-      "sha256": "ddf1f9715291233df81a1822669f17ab0aad000ed5b15e6df1470cf0a195621c"
-    },
-    {
-      "path": "tests/e2e_drill.js",
-      "bytes": 3202,
-      "sha256": "a1af83fa962b7f0ef7bdae84ff08ab25cfb7362fff64604871e7c6a20e4dc92b"
-    },
-    {
-      "path": "tests/e2e_lab3d.js",
-      "bytes": 9642,
-      "sha256": "610dfdefe13f1c1cc238817d524dbd1c0c6d6fbf2195fccb954153f90f19ebd1"
-    },
-    {
-      "path": "tests/e2e_schedule.js",
-      "bytes": 9398,
-      "sha256": "ba1f0c0d5720621285935db72667daa6fe1399e06bf266684fbd81c456d6a279"
-    },
-    {
-      "path": "tests/e2e_tt_only.js",
-      "bytes": 2665,
-      "sha256": "e5cf688d42f296b49d64b449ba12956a90fe644060abdf2f21cb00cd9aed00e2"
-    },
-    {
-      "path": "tests/e2e_web.js",
-      "bytes": 7179,
-      "sha256": "831b0fea6ee0b5e08d4e6d10d446dda1f8bb53b95f173f1e6be858f9cdf92468"
-    },
-    {
-      "path": "tests/harness.js",
-      "bytes": 1712,
-      "sha256": "b880f25c86ffd9ec4ff39e091cfaf8b1e6bebfb64a443d6f945d99f4b4dcf48c"
-    },
-    {
-      "path": "tests/negative_control.js",
-      "bytes": 1071,
-      "sha256": "20967b079c762b4df046e1eb38ede91c5e360f640ad3082ed5397980d6e9045e"
-    },
-    {
-      "path": "tests/package-lock.json",
-      "bytes": 1698,
-      "sha256": "7d292bdb6dc7853eaf52417ca295e4117fd15d9c0443e9a95e97d4511f299aba"
-    },
-    {
-      "path": "tests/package.json",
-      "bytes": 499,
-      "sha256": "4e71a803b68c78822ef62364d7a5863c9973d407733f6f6df15fdcc384b5f50b"
-    },
-    {
-      "path": "tests/regress.py",
-      "bytes": 14189,
-      "sha256": "ce0d4ff9f0158f72b96787b9b30addd2f00aa37923b1104703d7e502f49a4fe6"
-    },
-    {
-      "path": "tests/run_all.sh",
-      "bytes": 3396,
-      "sha256": "3d8be8991bc5107b5a0ce0b3f298c074693b47af165054ff643c6eb2bdcaa352"
-    },
-    {
-      "path": "tests/samples/drill_xss.json",
-      "bytes": 844,
-      "sha256": "c9f0f2776cd5868dc00b0609b933a620ef3a986ab56d2d30fd1cbd299154d172"
-    },
-    {
-      "path": "tests/samples/expect_dated_private.json",
-      "bytes": 109,
-      "sha256": "8f8351972c6c7bfb9107687473c3b34ccf41132b8683a1cdf850229e199a17ad"
-    },
-    {
-      "path": "tests/samples/expect_dated_public.json",
-      "bytes": 118,
-      "sha256": "b41a72636591dbfacf81b2aabdf600669aee0ea461ab6ef65076660953872634"
-    },
-    {
-      "path": "tests/samples/lab_bad_expr.json",
-      "bytes": 3759,
-      "sha256": "f09f7cdc9d69d0197f8398f547192c2c8c11d4f082ded57793b22a33ef725edf"
-    },
-    {
-      "path": "tests/samples/schedule_tt_only.json",
-      "bytes": 176,
-      "sha256": "72bc7e2080e6f85200d6da806737a4e06e228353f3ab1fca3e8329a89fdde35b"
-    },
-    {
-      "path": "tests/samples/timetable_anon.json",
-      "bytes": 1386,
-      "sha256": "f1b3a47281842ffbee5d23b532c62c0a18589a25cc1c3697f51d621bceca4637"
-    },
-    {
-      "path": "tests/test_safe_expr.js",
-      "bytes": 2714,
-      "sha256": "d5a27505f1f89ef5eab955e7600a99cdbaf6e5a7bbc354af8e3047d56948a418"
-    },
-    {
-      "path": "tools/build_web.py",
-      "bytes": 4339,
-      "sha256": "faa4e2a1db526492bd0424ed67b08646874c4a569a5606cd2d2b636a023ed297"
-    },
-    {
-      "path": "tools/lecture_metadata.py",
-      "bytes": 1054,
-      "sha256": "822ffaef7f5bb9c3c94653a7ecfbc0939b9db2bb6ed4fb46e2e66e9d7df9402b"
-    },
-    {
-      "path": "tools/make_manifest.py",
-      "bytes": 2150,
-      "sha256": "7b85d3b1c045bb4eec03ce0de004ecd4c1db35fa8748af7caeabf739fdb7e0fa"
-    },
-    {
-      "path": "tools/mkzip.py",
-      "bytes": 400,
-      "sha256": "fa66884db4ad58fda2d5ff5de80babedf2fa2bf0ea57c55b3029db110d199adc"
-    },
-    {
-      "path": "tools/mode4.css",
-      "bytes": 837,
-      "sha256": "71e83d1935fed846de119b18c1def59c349a43ab9a0da030471fa58746bc8cb8"
-    },
-    {
-      "path": "tools/mode4.js",
-      "bytes": 14050,
-      "sha256": "4df51bf9edb3305e1739eed95d7dd50f29c819233e5dd68fff2d56ba6788fa75"
-    },
-    {
-      "path": "tools/verify_pack.py",
-      "bytes": 3115,
-      "sha256": "db2e3000eef11df4f15dcd62ea281d99f50a072e5f51271830417d2fb7f27270"
-    },
-    {
-      "path": "tools/web_template.html",
-      "bytes": 9023,
-      "sha256": "6f9cad45251bf451dbbc69738483879087fb131df0dcf5ebbf042e2145adf199"
-    }
-  ],
-  "file_count": 56,
-  "pack_revision": "2026-11-01-web-first.1"
+  {
+   "path": "README.md",
+   "sha256": "2162d2804ac7dcb7211815b20e929074804052af2fc4b4cfd22b51a37d561582",
+   "bytes": 4371
+  },
+  {
+   "path": "skills/UPDATE_PROCESS.md",
+   "sha256": "609c6297f283a6c838c1fd598fae88bc6338e476a5d3bcbadc738c28156fa454",
+   "bytes": 2311
+  },
+  {
+   "path": "skills/VERSIONS.md",
+   "sha256": "5c3c503155044e4e26525c32054b5dd4bd6b8192aed06c9e179f24407e86d6c9",
+   "bytes": 2750
+  },
+  {
+   "path": "skills/kok-concept-lab/SKILL.md",
+   "sha256": "bc709bcc276d45c7fe43b0d810a0f093c051868a3a6d0790d71be2cad54f3000",
+   "bytes": 13018
+  },
+  {
+   "path": "skills/kok-concept-lab/resources/examples/generic_info_bars.json",
+   "sha256": "ed68ea44dd0ddeeedeb4a7115eacfec7a42c303ab643de2b6d1632617da51c5d",
+   "bytes": 4520
+  },
+  {
+   "path": "skills/kok-concept-lab/resources/lab.schema.md",
+   "sha256": "f8e0c53790d07ce0a5830879d8c07feaafd4acb81d1a1e92e29bf5b670d89292",
+   "bytes": 271
+  },
+  {
+   "path": "skills/kok-concept-lab/resources/lab3d_template.html",
+   "sha256": "566ec0055c1cd4e93f6e17b0ff657ded9ab42478a7858b14683a31ed1a026963",
+   "bytes": 18925
+  },
+  {
+   "path": "skills/kok-concept-lab/resources/make_lab3d.py",
+   "sha256": "7bffd2edadcbcb0fa164b98cc09c25fbc5f717ec3719553b876c72d34915fd72",
+   "bytes": 1579
+  },
+  {
+   "path": "skills/kok-concept-lab/resources/safe_expr.js",
+   "sha256": "ce1e818e5e7bf109f99572e7c94019acf6857cb4fcfee8dfb9b481029314f4f8",
+   "bytes": 4343
+  },
+  {
+   "path": "skills/kok-concept-lab/resources/safe_expr.py",
+   "sha256": "31cf44a10eb79c33d3338193da080b8861a7592da1951d014de868f24a711f3e",
+   "bytes": 3783
+  },
+  {
+   "path": "skills/kok-lecture-collector/SKILL.md",
+   "sha256": "28b4127321de54eba8ff02f5ecf4a0e078ce321bd5110d2e3caf85fb869a9c6f",
+   "bytes": 11643
+  },
+  {
+   "path": "skills/kok-lecture-collector/resources/lecture_template.md",
+   "sha256": "ede56e45c8f837ab53242c4d296c264a490e129923197cdaf959b3b59320b501",
+   "bytes": 912
+  },
+  {
+   "path": "skills/kok-onboarding/SKILL.md",
+   "sha256": "f5f527b0fd3d0923e64ffbf5cd0a07b8238df065e830c336ad1768f03247566e",
+   "bytes": 14371
+  },
+  {
+   "path": "skills/kok-onboarding/resources/intro.md",
+   "sha256": "e1d86a266f01c117928802513878e8393f555dae8d200b56878d316f714b6b08",
+   "bytes": 180
+  },
+  {
+   "path": "skills/kok-podcast/SKILL.md",
+   "sha256": "ebc0de3f190f75c6660b9530c90b01283ba6a9d26013e4cf91f9cb64de8dda64",
+   "bytes": 9557
+  },
+  {
+   "path": "skills/kok-podcast/resources/status.example.json",
+   "sha256": "f47eac59dbf2a8daedd9bc849ea5c21e57faff3cd35fc591d0499cc02e89215e",
+   "bytes": 117
+  },
+  {
+   "path": "skills/kok-problem-drill/SKILL.md",
+   "sha256": "fe9f29c4fb5db371eb056754dc3eb3a718c814e159c2098992f89aced88d401d",
+   "bytes": 9065
+  },
+  {
+   "path": "skills/kok-problem-drill/resources/build.py",
+   "sha256": "47cc4f48a23a5c85629e24d04970c61955051a4c78644592f7bd696ef9b97730",
+   "bytes": 1634
+  },
+  {
+   "path": "skills/kok-problem-drill/resources/drill.css",
+   "sha256": "64cf13b5fc89b0fc7072392cd7b9183e97ccb89b6dd868d5677cdc1f2f2bec79",
+   "bytes": 1871
+  },
+  {
+   "path": "skills/kok-problem-drill/resources/drill.js",
+   "sha256": "6b09223332ed0482299252edc61bad3c70a4bad1b0f5a106dcca1a105dd1887e",
+   "bytes": 4160
+  },
+  {
+   "path": "skills/kok-problem-drill/resources/spec.schema.json",
+   "sha256": "c1c35823c9c47da0e22ac4070b1af72147d25a0af0cdbb91e5f894faeb69523d",
+   "bytes": 787
+  },
+  {
+   "path": "skills/kok-problem-drill/resources/template.html",
+   "sha256": "f363c9b76b8a04eb7fb01c313b230573648445c78a1b9079892f05feecb3d8f6",
+   "bytes": 7777
+  },
+  {
+   "path": "skills/kok-router/SKILL.md",
+   "sha256": "f496135c1ecd81acfe53f4217d31d34ef8bf97bf144474f37cdc6ed571dd0282",
+   "bytes": 11887
+  },
+  {
+   "path": "skills/kok-router/resources/route_table.json",
+   "sha256": "b09bd6fdf8484ab7eff28d59010dddd70ff84b420b2d03a346acefaf969da969",
+   "bytes": 246
+  },
+  {
+   "path": "skills/kok-schedule/SKILL.md",
+   "sha256": "a530b250b92b667415dccf26a2c397560951c978b92ff227d218d2069744a5c2",
+   "bytes": 13457
+  },
+  {
+   "path": "skills/kok-schedule/resources/schedule.example.json",
+   "sha256": "e1c5d9687cdfb68820115deaaabece63ba2ab1158c07ca8d58559469e1e0f984",
+   "bytes": 309
+  },
+  {
+   "path": "tests/block_playwright.js",
+   "sha256": "2ba87c671abae30b4d8ff7cab14e93f6cd385f9826050321b2830198a43f9752",
+   "bytes": 416
+  },
+  {
+   "path": "tests/browser.js",
+   "sha256": "ddf1f9715291233df81a1822669f17ab0aad000ed5b15e6df1470cf0a195621c",
+   "bytes": 1519
+  },
+  {
+   "path": "tests/e2e_drill.js",
+   "sha256": "a1af83fa962b7f0ef7bdae84ff08ab25cfb7362fff64604871e7c6a20e4dc92b",
+   "bytes": 3202
+  },
+  {
+   "path": "tests/e2e_lab3d.js",
+   "sha256": "610dfdefe13f1c1cc238817d524dbd1c0c6d6fbf2195fccb954153f90f19ebd1",
+   "bytes": 9642
+  },
+  {
+   "path": "tests/e2e_schedule.js",
+   "sha256": "ba1f0c0d5720621285935db72667daa6fe1399e06bf266684fbd81c456d6a279",
+   "bytes": 9398
+  },
+  {
+   "path": "tests/e2e_tt_only.js",
+   "sha256": "e5cf688d42f296b49d64b449ba12956a90fe644060abdf2f21cb00cd9aed00e2",
+   "bytes": 2665
+  },
+  {
+   "path": "tests/e2e_web.js",
+   "sha256": "831b0fea6ee0b5e08d4e6d10d446dda1f8bb53b95f173f1e6be858f9cdf92468",
+   "bytes": 7179
+  },
+  {
+   "path": "tests/harness.js",
+   "sha256": "b880f25c86ffd9ec4ff39e091cfaf8b1e6bebfb64a443d6f945d99f4b4dcf48c",
+   "bytes": 1712
+  },
+  {
+   "path": "tests/negative_control.js",
+   "sha256": "20967b079c762b4df046e1eb38ede91c5e360f640ad3082ed5397980d6e9045e",
+   "bytes": 1071
+  },
+  {
+   "path": "tests/package-lock.json",
+   "sha256": "7d292bdb6dc7853eaf52417ca295e4117fd15d9c0443e9a95e97d4511f299aba",
+   "bytes": 1698
+  },
+  {
+   "path": "tests/package.json",
+   "sha256": "4e71a803b68c78822ef62364d7a5863c9973d407733f6f6df15fdcc384b5f50b",
+   "bytes": 499
+  },
+  {
+   "path": "tests/regress.py",
+   "sha256": "ce0d4ff9f0158f72b96787b9b30addd2f00aa37923b1104703d7e502f49a4fe6",
+   "bytes": 14189
+  },
+  {
+   "path": "tests/run_all.sh",
+   "sha256": "b9d274ebeda10738ffc4c4b5a985f9fb564e3fde161c793372f9185146a108f8",
+   "bytes": 3553
+  },
+  {
+   "path": "tests/samples/drill_xss.json",
+   "sha256": "c9f0f2776cd5868dc00b0609b933a620ef3a986ab56d2d30fd1cbd299154d172",
+   "bytes": 844
+  },
+  {
+   "path": "tests/samples/expect_dated_private.json",
+   "sha256": "8f8351972c6c7bfb9107687473c3b34ccf41132b8683a1cdf850229e199a17ad",
+   "bytes": 109
+  },
+  {
+   "path": "tests/samples/expect_dated_public.json",
+   "sha256": "b41a72636591dbfacf81b2aabdf600669aee0ea461ab6ef65076660953872634",
+   "bytes": 118
+  },
+  {
+   "path": "tests/samples/lab_bad_expr.json",
+   "sha256": "f09f7cdc9d69d0197f8398f547192c2c8c11d4f082ded57793b22a33ef725edf",
+   "bytes": 3759
+  },
+  {
+   "path": "tests/samples/schedule_tt_only.json",
+   "sha256": "72bc7e2080e6f85200d6da806737a4e06e228353f3ab1fca3e8329a89fdde35b",
+   "bytes": 176
+  },
+  {
+   "path": "tests/samples/timetable_anon.json",
+   "sha256": "f1b3a47281842ffbee5d23b532c62c0a18589a25cc1c3697f51d621bceca4637",
+   "bytes": 1386
+  },
+  {
+   "path": "tests/test_partial_web.py",
+   "sha256": "21aa00abdbb0dbb1007f3c55776d2eda378c8e41a6f156260e7c6e14df03591d",
+   "bytes": 5969
+  },
+  {
+   "path": "tests/test_safe_expr.js",
+   "sha256": "d5a27505f1f89ef5eab955e7600a99cdbaf6e5a7bbc354af8e3047d56948a418",
+   "bytes": 2714
+  },
+  {
+   "path": "tools/build_web.py",
+   "sha256": "b1cefbef95ca3042d5f9934eb6b38a8c072b5bec309e5d550ddbe80462727358",
+   "bytes": 8424
+  },
+  {
+   "path": "tools/lecture_metadata.py",
+   "sha256": "ac72895c38f4e8c378e7b189dce0d49212b42590dcbf6af99ad4881d78c2a1be",
+   "bytes": 1433
+  },
+  {
+   "path": "tools/make_manifest.py",
+   "sha256": "280ee700b09caea22dbba732f59d3b8647df631f812eff8067769800ef3c20f1",
+   "bytes": 2640
+  },
+  {
+   "path": "tools/mkzip.py",
+   "sha256": "fa66884db4ad58fda2d5ff5de80babedf2fa2bf0ea57c55b3029db110d199adc",
+   "bytes": 400
+  },
+  {
+   "path": "tools/mode4.css",
+   "sha256": "71e83d1935fed846de119b18c1def59c349a43ab9a0da030471fa58746bc8cb8",
+   "bytes": 837
+  },
+  {
+   "path": "tools/mode4.js",
+   "sha256": "4df51bf9edb3305e1739eed95d7dd50f29c819233e5dd68fff2d56ba6788fa75",
+   "bytes": 14050
+  },
+  {
+   "path": "tools/verify_pack.py",
+   "sha256": "db2e3000eef11df4f15dcd62ea281d99f50a072e5f51271830417d2fb7f27270",
+   "bytes": 3115
+  },
+  {
+   "path": "tools/verify_web.py",
+   "sha256": "e34e5ebecc278eb6efb5fbfe1d5ae4e3595ef9827471868ceab827b257070bf8",
+   "bytes": 2778
+  },
+  {
+   "path": "tools/web_template.html",
+   "sha256": "011e87a0065c6d49939c7f29bd1cea8b33b273ba15f846aaa35b9048932b99d7",
+   "bytes": 9856
+  }
+ ],
+ "file_count": 58
 }
