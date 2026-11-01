@@ -13,3 +13,4 @@ hub/data/
 hub/추가자료/
 node_modules/
 .coverage
+.private/
