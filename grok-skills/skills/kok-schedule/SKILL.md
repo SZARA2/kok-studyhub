@@ -8,7 +8,7 @@ description: >-
 
 | 항목 | 내용 |
 |---|---|
-| 버전 | v1.2.0 |
+| 버전 | v1.2.1 |
 | 담당자 | 용철 (추후 누코드 연동=제무, 이번 미구현) |
 | 유래 | klas-deadline-cards (sha256 `5b8bde242fa601fcfa0506c54388bd30d8a9e8dfb9e0e91b8e166fbb6faca4ae`) · upstream-latest klas-deadline-cards (sha256 `3542388ccbd921d2d36e0d849aa5d1cf6b8d34fde7d581c8933b14b865d5f449`) |
 | 입력 | 사용자가 보낸 시간표 이미지·PDF·텍스트 + 사용자가 직접 입력한 일정 + (선택) 공통 `lecture.md` |
@@ -26,6 +26,7 @@ description: >-
 - [ ] D-day·오늘/내일·지난 항목 분리·카드/슬라이드는 date가 명시된 항목에만 적용, 날짜 없는 항목은 제외
 
 ## 변경이력
+- v1.2.1 (2026-11-01): 주제만 받은 요청도 HTML 웹으로 완료하는 공통 실행 규칙과 정합. 원본 유래 sha256은 기존 값 유지.
 - v1.2.0 (2026-11-01): upstream-latest klas-deadline-cards (sha256 `3542388ccbd921d2d36e0d849aa5d1cf6b8d34fde7d581c8933b14b865d5f449`) 병합.
   - 채택: HH:MM 표기, 오늘/내일, D-day 뱃지·색 규칙, 지난 항목 분리, 320px 카드·360×200 슬라이드(3초 자동 넘김, 위치 점) — 날짜가 명시된 항목에만
   - 거부: KLAS/학교 LMS 사이트 로그인·Vault 저장 로그인 시도·메뉴별 마감 수집(사용자 규칙: 학교 사이트·저장 로그인 읽지 않음), klas_deadlines/card/slider 별도 파일 3개(통합 웹 4번에 포함)

@@ -8,7 +8,7 @@ description: >-
 
 | 항목 | 내용 |
 |---|---|
-| 버전 | v1.2.0 |
+| 버전 | v1.2.1 |
 | 담당자 | 용철 (추후 누코드 연동=제무, 이번 미구현) |
 | 유래 | notebooklm-studio-pack (sha256 `7c2050db94a64682553f126e3d7fa7124c2e71992bc868be327ce0eb976db176`) · upstream-latest notebooklm-studio-pack (sha256 `9c8569368d1fa42c0d8a3fabeb8f97aa6c75fc8f0429fb404cc6b48dc2fdb526`) |
 | 입력 | 공통 `lecture.md` |
@@ -26,6 +26,7 @@ description: >-
 - [ ] 브라우저 audio.mp3 loadedmetadata·duration·재생 진행 확인
 
 ## 변경이력
+- v1.2.1 (2026-11-01): 주제만 받은 요청도 HTML 웹으로 완료하는 공통 실행 규칙과 정합. 원본 유래 sha256은 기존 값 유지.
 - v1.2.0 (2026-11-01): upstream-latest notebooklm-studio-pack (sha256 `9c8569368d1fa42c0d8a3fabeb8f97aa6c75fc8f0429fb404cc6b48dc2fdb526`) 병합.
   - 채택: 기본 한국어·짧게(5~8분), mp3 mono 64k 변환(25MB 초과 48k), 중간 텍스트 먼저(요약 2~4문장+핵심 개념 2개), 소스 = lecture.md 1개 + URL 1개, 1분 간격 최대 약 12분 확인, 생성 중을 완료라 말하지 않음
   - 채택(데모 적용): 기존 25:53 m4a를 자르지 않고 mp3 변환(2026-11-01 16:05:48~16:05:57 KST), 웹 플레이어 podcast/audio.mp3, m4a 보존, interim.md 작성. 오디오 재생성 안 함

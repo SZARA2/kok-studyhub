@@ -32,7 +32,7 @@ def images(d):
 def drill(f):
     s=json.load(open(f,encoding='utf-8'));ck(s.get('title'),'drill: title')
     for k,q in enumerate(s['questions']):
-        ok=len(q['o'])==4 and q['a'] in(0,1,2,3) and q['ok'] and q['no'] and q['loc'] and q['src'] in('원문 그대로','변형','원문 기반 Bot 작성') and q['ans_src'] in('원문 제공 정답','Bot 풀이')
+        ok=len(q['o'])==4 and q['a'] in(0,1,2,3) and q['ok'] and q['no'] and q['loc'] and q['src'] in('원문 그대로','변형','원문 기반 Bot 작성','주제 기반 Bot 작성') and q['ans_src'] in('원문 제공 정답','Bot 풀이')
         ck(ok,f'drill: Q{k+1} 형식');ck(len(set(q['o']))==4,f'drill: Q{k+1} 보기 중복 없음')
     ck(len({q['a'] for q in s['questions']})>1,'drill: 정답 위치 섞임')
 sys.path.insert(0,os.path.join(R,'skills/kok-concept-lab/resources'))
@@ -94,12 +94,13 @@ def schedule(f):
         if it['label']=='제안':ck(it.get('source'),f"schedule: {it['id']} 제안 근거")
     ck(S.get('note'),'schedule: 원문 마감 유무 문장')
 def skills(d=os.path.join(R,'skills')):
+    expected_version=json.load(open(os.path.join(R,'MANIFEST.json'),encoding='utf-8'))['pack_version']
     names=['kok-onboarding','kok-router','kok-lecture-collector','kok-problem-drill','kok-podcast','kok-concept-lab','kok-schedule']
     ck(sorted(os.listdir(d))==sorted([n for n in os.listdir(d) if n in names]+[n for n in os.listdir(d) if n.endswith('.md')]),'skills: 7개 외 스킬 폴더 없음')
     for n in names:
         t=open(f'{d}/{n}/SKILL.md',encoding='utf-8').read()
         ck(t.startswith(f'---\nname: {n}\n'),f'skills: {n} frontmatter name')
-        ck('버전 | v1.2.0' in t,f'skills: {n} 버전 v1.2.0');ck(re.search(r'v1\.2\.0.*?sha256',t.split('## 변경이력')[-1],re.S) is not None,f'skills: {n} 변경이력에 v1.2.0 upstream sha256');ck(n!='kok-schedule' or not [l for l in t.split('## 변경이력')[0].split('## 검증조건')[1].splitlines() if re.search(r'(?i)klas|lms|vault|로그인|학교 사이트',l) and not re.search('않|없음|금지|제거|빼|거부',l)],'skills: kok-schedule 본문에 KLAS/LMS 로그인·수집 절차 없음')
+        ck(f'버전 | {expected_version}' in t,f'skills: {n} 버전 {expected_version}');ck(re.search(re.escape(expected_version)+r'.*?sha256',t.split('## 변경이력')[-1],re.S) is not None,f'skills: {n} 변경이력과 유래 sha256');ck(n!='kok-schedule' or not [l for l in t.split('## 변경이력')[0].split('## 검증조건')[1].splitlines() if re.search(r'(?i)klas|lms|vault|로그인|학교 사이트',l) and not re.search('않|없음|금지|제거|빼|거부',l)],'skills: kok-schedule 본문에 KLAS/LMS 로그인·수집 절차 없음')
         for ref in sorted(set(re.findall(r'resources/([A-Za-z0-9_./-]+\.(?:json|js|py|html|md|css)\b)',t))):ck(os.path.exists(f'{d}/{n}/resources/{ref}'),f'skills: {n} 참조 resources/{ref} 존재')
         for k in['담당자','유래','## 검증조건','## 변경이력','## 공통 규칙']:ck(k in t,f'skills: {n} {k}')
     rt=open(f'{d}/kok-router/SKILL.md',encoding='utf-8').read().split('## 순서')[0].split('## 번호표')[1]

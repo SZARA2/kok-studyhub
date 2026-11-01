@@ -6,7 +6,7 @@ description: '콕 통합 3번: 공통 lecture.md에 근거한 개념 하나를 �
 
 | 항목 | 내용 |
 |---|---|
-| 버전 | v1.2.0 |
+| 버전 | v1.2.1 |
 | 담당자 | 용철 (추후 누코드 연동=제무, 이번 미구현) |
 | 유래 | concept-lab-visualizer (sha256 `67830555b31385cce5933e3ac0fb9b1a0aaaaff7d0f3420a140a6e375521b1a1`) · upstream-latest concept-lab-visualizer (sha256 `d4d10c0f9909620d69003aef518822661ea4c65f2615b2089eeba6647dc1109a`) |
 | 입력 | 공통 `lecture.md` |
@@ -23,6 +23,7 @@ description: '콕 통합 3번: 공통 lecture.md에 근거한 개념 하나를 �
 - [ ] e2e_lab3d·test_safe_expr·negative_control 엄격 검사(=== true) 통과, 로그 tests/logs
 
 ## 변경이력
+- v1.2.1 (2026-11-01): 주제만 받은 요청도 HTML 웹으로 완료하는 공통 실행 규칙과 정합. 원본 유래 sha256은 기존 값 유지.
 - v1.2.0 보완 (2026-11-01): 식 상한·유한성 검사, max_var 자동 맞춤 안내, 색 범례를 본문 규칙으로 명시(다른 장면에도 적용).
 - v1.2.0 (2026-11-01): upstream-latest concept-lab-visualizer (sha256 `d4d10c0f9909620d69003aef518822661ea4c65f2615b2089eeba6647dc1109a`) 병합.
   - 채택: 3D(Three.js CDN) 책장 장면·굵은 잉크선·빛나는 화살표/그래프·슬라이더, 예측→실험→증명, 선택 후 덮개 들춤·정답 도장, 처음 보기 버튼, 성능 목록(식 캐시·변경 시만 계산·rAF 묶음·유휴/숨김 정지·배율 상한), lab3d_template.html + make_lab3d.py + examples/, 헤드리스 swiftshader 캡처, 기본/극단값 node 검산, 장면 7종 규칙(문서로 유지)

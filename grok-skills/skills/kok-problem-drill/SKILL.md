@@ -1,12 +1,12 @@
 ---
 name: kok-problem-drill
-description: '콕 통합 1번: 공통 lecture.md로 단계별 객관식 문제 드릴(오답 취소선·힌트·정답 후 다음)을 만들 때 사용.'
+description: 'Quiz me, 퀴즈, 문제, 연습 요청으로 실제로 풀 수 있는 HTML 웹을 만들어 첨부한다. 주제만 있어도 Bot 작성 노트로 진행하며 채팅 문제 나열로 끝내지 않는다.'
 ---
 # kok-problem-drill
 
 | 항목 | 내용 |
 |---|---|
-| 버전 | v1.2.0 |
+| 버전 | v1.2.1 |
 | 담당자 | 용철 (추후 누코드 연동=제무, 이번 미구현) |
 | 유래 | problem-drill (sha256 `62d36b56e120a161654653ae981c284464ac0891a2fcedc2f05dd14baddb6f77`) / temp-drill-web-v1 (sha256 `8d9b29c8c665d029f052a6ebad1caee31101f40bc6d096d320c6d0e77a4ff2f1`) · upstream-latest problem-drill (sha256 `21231599ef39223dd47283de0433b1e1985fb9f65b7975926cf92a4b0c1018a5`) |
 | 입력 | 공통 `lecture.md` (작업 폴더 `<작업폴더>/lecture.md`, kok-lecture-collector 출력) |
@@ -23,6 +23,7 @@ description: '콕 통합 1번: 공통 lecture.md로 단계별 객관식 문제 �
 - [ ] 정답 하트·오답 아쉬움 팝업, 줄긋기+힌트, 정답 후 다음 동작(e2e_drill)
 
 ## 변경이력
+- v1.2.1 (2026-11-01): 주제만 받은 요청도 HTML 웹으로 완료하는 공통 실행 규칙과 정합. 원본 유래 sha256은 기존 값 유지.
 - v1.2.0 (2026-11-01): upstream-latest problem-drill (sha256 `21231599ef39223dd47283de0433b1e1985fb9f65b7975926cf92a4b0c1018a5`) 병합.
   - 채택: 정답 하트·오답 아쉬움 팝업, KaTeX 수식, 줄긋기+힌트+정답 후 다음, 재사용 틀+build.py(spec.json → drill.html), 스와이프, 점수 카드
   - 채택(보안 보강): 모든 글 textContent 렌더, JSON `<`→`\u003c` escape, KaTeX trust:false, https 링크만 허용
@@ -50,9 +51,9 @@ description: '콕 통합 1번: 공통 lecture.md로 단계별 객관식 문제 �
 - 재사용 틀: `resources/template.html`, `resources/drill.js`, `resources/drill.css`, `resources/build.py`(spec.json → drill.html), 형식 `resources/spec.schema.json`. 매번 새로 만들지 않는다.
 
 ## 순서
-1. lecture.md를 읽고 직접 풀어 정답을 확인한다. 원문에 없는 숫자·사실은 만들지 않는다.
+1. lecture.md를 읽고 직접 풀어 정답을 확인한다. `source_mode: topic_generated`이면 `src="주제 기반 Bot 작성"`, `ans_src="Bot 풀이"`, `loc="lecture.md C번호 (Bot 작성 노트)"`로 표시하고 강의 원문 미제공 안내를 웹에도 넣는다. 수집 모드에서는 원문에 없는 내용을 원문으로 만들지 않는다.
 2. 개념마다 2~5문제, 첫 문제 `s`에 개념 이름(2~6자). 교재 문제는 주어진 것→식→조건→계산→답→해석 6~10단계.
 3. 질문 한 줄(약 25자), 보기 짧게, `ok` 해설 한 문장, `no` 정답을 말하지 않는 힌트.
 4. spec.json: `{"title","problem","source_status","questions":[{"s","q","o":[4개],"a":0-3,"ok","no","src":"원문 그대로|변형|원문 기반 Bot 작성","ans_src":"원문 제공 정답|Bot 풀이","loc":"원문위치"}]}`
-5. `python3 resources/build.py spec.json <출력폴더>` → drill.html. 문제 수·최종 답·빠진 부분만 짧게 알리고 drill.html을 채팅에 첨부한다(spec.json은 로컬).
+5. 실제 resources/build.py 경로를 찾아 `python3 <스킬루트>/resources/build.py spec.json <출력폴더>`로 drill.html을 생성한다. 파일 존재·HTML 내용·보기 선택과 다음 진행을 확인하고 실제로 첨부한다. "만들 수 있어요"나 채팅 문제만으로 끝내지 않는다. 주제가 있으면 문제 수 등 세부 조건을 반복해서 묻지 않는다.
 6. 검증: `python3 tests/regress.py drill spec.json`, 브라우저 `node tests/e2e_drill.js`(.katex 렌더 또는 CDN 실패 문구, 하트/아쉬움 팝업, XSS 표본 `tests/samples/drill_xss.json` 미실행).
